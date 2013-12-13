@@ -29,4 +29,6 @@ http://www.dreamincode.net/forums/blog/2274/entry-4614-pygame-exploding-our-ship
 
 http://www.dreamincode.net/forums/blog/2274/entry-4616-pygame-managing-health/
 
+http://www.dreamincode.net/forums/blog/2274/entry-4619-pygame-keeping-score/
+
 more to come...
