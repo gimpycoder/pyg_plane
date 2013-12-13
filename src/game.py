@@ -4,6 +4,7 @@ from vector import Vector
 from bullet import Bullet
 from explosion import Explosion
 from health import HealthBar
+from boat import Boat
 
 class Game(object):
     def main(self,screen):
@@ -11,6 +12,8 @@ class Game(object):
         self.screen = screen
         clock = pyg.time.Clock()
         player = Player(screen, '../res/plane.png')
+        boat_imgs = ['../res/boat_a_01.png','../res/boat_a_02.png']
+        boat = Boat(screen, boat_imgs)
         health = HealthBar(screen, '../res/health_bar.png', Vector(0,0))
         health.full_health()
         bullets = []
@@ -68,6 +71,8 @@ class Game(object):
                 # kill player:
                 player_dead = True
             
+            
+            
             if not player_dead:    
                 if health.is_dead():
                     # add an explosion based on where our player is.
@@ -81,6 +86,12 @@ class Game(object):
             # movement but only if they aren't dead.
             if not player_dead:
                 player.update(move)
+                boat.update()
+                if boat.is_collision(player.get_rect()):
+                    player_dead = True
+                    health.zero_health()
+                    explosions.append(self.create_explosion(player.get_center()))
+                
             # always update the bullets
             for b in bullets:
                 b.update()
@@ -106,6 +117,7 @@ class Game(object):
                 else:
                     b.display()
             
+            boat.display()
             # Display player second so it will
             # draw over top the bullets. 
             # Don't display player if they're dead.
@@ -117,7 +129,7 @@ class Game(object):
             for explosion in explosions:
                 explosion.display()
             
-            health.decrease_health(1)
+            #health.decrease_health(1)
             #if not health.is_full_health():
             #    health.increase_health(1)
                 

@@ -10,7 +10,11 @@ class Player(object):
         # for now we duplicate functionality from the original goal.
         self.img_x, self.img_y = self.image.get_size()
         x, y  = screen.get_size()
-        self.location = Vector(x/2 - self.img_x/2, y/2 - self.img_y/2)
+        #self.location = Vector(x/2 - self.img_x/2, y/2 - self.img_y/2)
+        self.location = Vector(40,40)
+    
+    def get_rect(self):
+        return pyg.Rect(self.location.x, self.location.y, self.img_x, self.img_y)
     
     def get_center(self):
         # get our location
