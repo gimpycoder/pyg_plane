@@ -13,7 +13,7 @@ class Game(object):
         self.screen = screen
         clock = pyg.time.Clock()
         player = Player(screen)
-        boat = Boat(screen)
+        boat = Boat(screen, player)
         health = HealthBar(screen, Vector(0,0))
         health.full_health()
         bullets = []
@@ -21,6 +21,7 @@ class Game(object):
         player_dead = False
         cool_down = 5
         gun_too_hot = False
+        water = (2, 73, 148)
 
         while True:
             clock.tick(30)
@@ -88,9 +89,10 @@ class Game(object):
                 player.update(move)
                 boat.update()
                 if boat.is_collision(player.get_rect()):
-                    player_dead = True
-                    health.zero_health()
-                    explosions.append(self.create_explosion(player.get_center()))
+                    #player_dead = True
+                    #health.zero_health()
+                    #explosions.append(self.create_explosion(player.get_center()))
+                    health.decrease_health(boat.damage)
                 
             # always update the bullets
             for b in bullets:
@@ -104,8 +106,8 @@ class Game(object):
                                 
                 explosion.update()
             
-            # wipe the previous screen with black
-            screen.fill((0,0,0))
+            # add water
+            screen.fill(water)
 
             # display our bullets first.
             # but we don't want to display anything if it's outside
@@ -129,7 +131,7 @@ class Game(object):
             for explosion in explosions:
                 explosion.display()
             
-            health.decrease_health(1)
+            #health.decrease_health(1)
             #if not health.is_full_health():
             #    health.increase_health(1)
                 

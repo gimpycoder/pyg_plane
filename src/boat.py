@@ -8,13 +8,15 @@ import artwork
 class Boat(Vehicle):
     name = 'boat'
 
-    def __init__(self, screen, speed=5, bullet_speed=-5):
+    def __init__(self, screen, player, speed=5, bullet_speed=-5):
         super(Boat, self).__init__(self.name, Vector(0,0))
-        self.screen = screen
-        self.bullets = []
-        self.speed = speed
-        self.bullet_speed = bullet_speed
-        self.gun_location = Vector(20, 109)
+        self.screen         = screen
+        self.bullets        = []
+        self.speed          = speed
+        self.bullet_speed   = bullet_speed
+        self.gun_location   = Vector(20, 109)
+        self.target         = player
+        self.damage         = 10
         
         # for now we duplicate functionality from the original
         self.img_x, self.img_y = artwork.get_image(self.name, 0).get_size()
@@ -45,9 +47,15 @@ class Boat(Vehicle):
     
     def fire(self):
         # get a random float:
-        chance = random.random()
+        #chance = random.random()
         # we only fire 8% of the time
-        if chance <= .08:
+        #if chance <= .08:
+        if abs(self.target.location.x - self.location.x) <= 50:
+            # get a random float:
+            chance = random.random()
+            if chance > .20:
+                return
+            
             # find the gun
             gun = self.get_center()
             # create the bullet

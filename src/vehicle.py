@@ -15,10 +15,6 @@ class Vehicle(object):
         self.frame_delay        = artwork.FRAME_DELAY
         self.frame              = 0
         
-    
-    def update(self):
-        pass
-        
     def display(self):
         self.frame_delay -= 1
         if self.frame_delay <= 0:
