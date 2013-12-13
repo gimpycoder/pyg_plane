@@ -2,25 +2,22 @@ from vector import Vector
 import pygame as pyg
 import random
 from bullet import Bullet
+from vehicle import Vehicle
+import artwork
 
-class Boat(object):
-    def __init__(self, screen, image_sources, speed=5, bullet_speed=-5):
+class Boat(Vehicle):
+    name = 'boat'
+
+    def __init__(self, screen, speed=5, bullet_speed=-5):
+        super(Boat, self).__init__(self.name, Vector(0,0))
         self.screen = screen
-        
-        # assign all of the details about animating.
-        self.images = [
-            pyg.image.load(image_sources[0]),
-            pyg.image.load(image_sources[1])
-        ]
-        self.frame = 0
-        self.frame_rate = 4
         self.bullets = []
         self.speed = speed
         self.bullet_speed = bullet_speed
         self.gun_location = Vector(20, 109)
         
         # for now we duplicate functionality from the original
-        self.img_x, self.img_y = self.images[0].get_size()
+        self.img_x, self.img_y = artwork.get_image(self.name, 0).get_size()
         self.max_x, self.max_y  = screen.get_size()
         self.location = Vector(self.max_x/2 - self.img_x/2, 
                                self.max_y/2 - self.img_y/2)
@@ -73,13 +70,15 @@ class Boat(object):
         
     def display(self):
         # first draw the boat.
-        self.frame_rate -= 1
-        if self.frame_rate <= 0:
-            self.flip()
-            self.frame_rate = 4
-            
-        self.screen.blit(self.images[self.frame], 
-                         (self.location.x, self.location.y))
+        #self.frame_delay -= 1
+        #if self.frame_delay <= 0:
+        #    self.flip()
+        #    self.frame_delay = artwork.FRAME_DELAY
+        #
+        #img = artwork.get_image(self.name, self.frame)    
+        #self.screen.blit(img, (self.location.x, self.location.y))
+        super(Boat, self).display()
+        
                          
         # now draw all bullets and they will be on top of the boat.
         for b in self.bullets:

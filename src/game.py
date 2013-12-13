@@ -5,16 +5,16 @@ from bullet import Bullet
 from explosion import Explosion
 from health import HealthBar
 from boat import Boat
+import artwork
 
 class Game(object):
     def main(self,screen):
         # create the timer
         self.screen = screen
         clock = pyg.time.Clock()
-        player = Player(screen, '../res/plane.png')
-        boat_imgs = ['../res/boat_a_01.png','../res/boat_a_02.png']
-        boat = Boat(screen, boat_imgs)
-        health = HealthBar(screen, '../res/health_bar.png', Vector(0,0))
+        player = Player(screen)
+        boat = Boat(screen)
+        health = HealthBar(screen, Vector(0,0))
         health.full_health()
         bullets = []
         explosions = []
@@ -129,7 +129,7 @@ class Game(object):
             for explosion in explosions:
                 explosion.display()
             
-            #health.decrease_health(1)
+            health.decrease_health(1)
             #if not health.is_full_health():
             #    health.increase_health(1)
                 
@@ -141,9 +141,9 @@ class Game(object):
     def create_explosion(self, location):
         explosion = Explosion(screen,
                               location,
-                              max_power = 5,
-                              max_radius = 35)
-        explosion.build(20)
+                              max_power = 100,
+                              max_radius = 200)
+        explosion.build(250)
         return explosion
         
 #################################################################        
@@ -152,5 +152,7 @@ if __name__ == '__main__':
     pyg.init()
     # create a screen
     screen = pyg.display.set_mode((640,480))
+    # load our artwork
+    artwork.init()
     # run game and pass in screen
     Game().main(screen)

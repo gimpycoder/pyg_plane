@@ -67,7 +67,7 @@ class Explosion(object):
         dx = random.randint(-1,1)
         dy = random.randint(-1,1)
         # generate a random magnitude to grow our unit vector by.
-        mag = random.randint(-17,17)
+        mag = random.randint(-100,30)
         # create that actual vector from our random generation.
         movement = Vector(dx,dy)
         # scale our vector by our random magnitude.

@@ -1,17 +1,25 @@
 from vector import Vector
+from vehicle import Vehicle
+import artwork
 import pygame as pyg
 
-class Player(object):
-    def __init__(self, screen, image_source, speed=5):
+class Player(Vehicle):
+    name = 'player'
+
+    def __init__(self, screen, speed=5):
+        super(Player, self).__init__(self.name, Vector(0,0))
+        
         self.screen = screen
-        self.image = pyg.image.load(image_source)
         self.speed = speed
         
         # for now we duplicate functionality from the original goal.
-        self.img_x, self.img_y = self.image.get_size()
+        self.img_x, self.img_y = artwork.get_image(self.name, 0).get_size()
         x, y  = screen.get_size()
         #self.location = Vector(x/2 - self.img_x/2, y/2 - self.img_y/2)
         self.location = Vector(40,40)
+    
+    def flip(self):
+        pass
     
     def get_rect(self):
         return pyg.Rect(self.location.x, self.location.y, self.img_x, self.img_y)
@@ -62,4 +70,6 @@ class Player(object):
         self.location.y = y
         
     def display(self):
-        self.screen.blit(self.image, (self.location.x, self.location.y))
+        super(Player, self).display()
+        #img = artwork.get_image(self.name, self.frame)
+        #self.screen.blit(img, (self.location.x, self.location.y))

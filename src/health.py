@@ -1,10 +1,10 @@
 import pygame as pyg
 import math
+import artwork
 
 class HealthBar(object):
-    def __init__(self, screen, image_source, location):
+    def __init__(self, screen, location):
         self.screen   = screen
-        self.image    = pyg.image.load(image_source)
         self.location = location
         
         self.top_left     = (7,11)
@@ -42,7 +42,8 @@ class HealthBar(object):
         
     def display(self):
         # first draw our image.
-        self.screen.blit(self.image, (self.location.x, self.location.y))
+        img = artwork.get_image('health', 0)
+        self.screen.blit(img, (self.location.x, self.location.y))
         # build our rectangle but only if we still have health.
         if not self.is_dead():
             bar = pyg.Rect(self.top_left[0], 
