@@ -5,26 +5,40 @@ from bullet import Bullet
 from explosion import Explosion
 from health import HealthBar
 from boat import Boat
+from score import Score
 import artwork
 
 class Game(object):
     def main(self,screen):
         # create the timer
         self.screen = screen
-        clock = pyg.time.Clock()
+        clock = pyg.time.Clock() 
         player = Player(screen)
         boat = Boat(screen, player)
         health = HealthBar(screen, Vector(0,0))
         health.full_health()
+        score  = Score(screen, Vector(70, 33))
+        score.init()
+        score.value = 10000000000 - health.max_health
         bullets = []
         explosions = []
         player_dead = False
         cool_down = 5
         gun_too_hot = False
         water = (2, 73, 148)
+        
+        # just mocking game screen for now.
+        #numbers = artwork.get_image('numbers',0)
+        score_mock = artwork.get_image('score', 0)
+        wave  = artwork.get_image('wave', 0)
+        #nums = []
+        #for i in xrange(10):
+        #    nums.append(artwork.get_image(str(i), 0))
 
         while True:
             clock.tick(30)
+            
+            
             if gun_too_hot:
                 cool_down -= 1
                 
@@ -108,6 +122,7 @@ class Game(object):
             
             # add water
             screen.fill(water)
+            #screen.fill((0,0,0))
 
             # display our bullets first.
             # but we don't want to display anything if it's outside
@@ -131,14 +146,31 @@ class Game(object):
             for explosion in explosions:
                 explosion.display()
             
-            #health.decrease_health(1)
+            health.decrease_health(1)
             #if not health.is_full_health():
             #    health.increase_health(1)
                 
             health.display()
+            #x_ = 200
+            #y_ = 20
+            #change = 20
+            #for i in xrange(10):
+            #    self.screen.blit(nums[i], (x_, y_))
+            #    y_ += change
             
+            score.increase_score(1)
+            #key = str(score)[9]
+            score.display()
+            #self.screen.blit(score.digits[key], (200,20))
+            
+            #self.screen.blit(numbers, (70, 33))
+            self.screen.blit(score_mock, (5, 33))
+            self.screen.blit(wave, (5, 55))
+            #self.screen.blit(numbers, (70, 55))
+            #self.screen.blit(three, (50,200))
             # flip the buffer
             pyg.display.flip()
+            #raw_input('...')
             
     def create_explosion(self, location):
         explosion = Explosion(screen,

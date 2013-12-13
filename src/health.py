@@ -3,20 +3,22 @@ import math
 import artwork
 
 class HealthBar(object):
+
     def __init__(self, screen, location):
         self.screen   = screen
         self.location = location
         
         self.top_left     = (7,11)
         self.top_right    = (132,11)
-        self.bottom_left  = (7,20)
-        self.bottom_right = (132,20)
+        self.bottom_left  = (7,21)
+        self.bottom_right = (132,21)
         self.height       = abs(self.top_left[1] - self.bottom_left[1])
         self.width        = abs(self.top_left[0] - self.top_right[0])
         self.color        = (0, 255, 0)
         
         self.max_health   = self.width
         self.health       = 0
+        print '%s' % str(artwork.get_image('health', 0).get_size())
         
     def increase_health(self, amount):
         self.health += amount
