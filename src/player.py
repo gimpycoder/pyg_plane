@@ -23,7 +23,12 @@ class Player(Vehicle):
         self.bullet_speed = 5
     
     def flip(self):
-        pass
+        if self.frame >= len(artwork.assets['player'])-1:
+            self.frame = 0
+        else:
+            self.frame += 1
+            
+        #self.frame = 1 if (self.frame == 0) else 0
         
     def fire(self):
         # find the gun
