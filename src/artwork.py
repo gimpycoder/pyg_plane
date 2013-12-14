@@ -34,7 +34,7 @@ def init():
     assets['boat']      = [pyg.image.load(image_paths['boat'][0]),
                            pyg.image.load(image_paths['boat'][1])]
     assets['health']    = [pyg.image.load(image_paths['health'][0])]
-    assets['numbers']   = [pyg.image.load(image_paths['numbers'][0]).convert()]
+    assets['numbers']   = [pyg.image.load(image_paths['numbers'][0])]
     assets['score']     = [pyg.image.load(image_paths['score'][0])]
     assets['wave']      = [pyg.image.load(image_paths['wave'][0])]
     assets['power_up']  = [pyg.image.load(image_paths['power_up'][0]),
@@ -44,6 +44,11 @@ def init():
     assets['plane']     = [pyg.image.load(image_paths['plane'][0])]
     
     load_numbers()
+    
+    # .convert() ensures it's the proper pixel format for the game.
+    for (key,value) in assets.iteritems():
+        for img in assets[key]:
+            img.convert()
 
 #TODO: Generalize this so that it will load any slides provided
 # need to also include pad value in case we have borders to worry about.
