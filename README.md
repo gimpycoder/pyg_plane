@@ -35,4 +35,6 @@ http://www.dreamincode.net/forums/blog/2274/entry-4620-pygame-just-add-water-bac
 
 http://www.dreamincode.net/forums/blog/2274/entry-4622-pygame-managing-health-ii/
 
+http://www.dreamincode.net/forums/blog/2274/entry-4623-pygame-air-show-i/
+
 more to come...

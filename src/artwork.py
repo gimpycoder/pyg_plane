@@ -10,6 +10,8 @@ image_paths  = {
     'boat'              : ['../res/boat_a_01.png',
                            '../res/boat_a_02.png'
                           ],
+    'plane'             : ['../res/plane_a_01.png'],
+                          
     'health'            : ['../res/health_bar.png'],
     'numbers'           : ['../res/numbers.png'],
     'score'             : ['../res/score_text.png'],
@@ -39,6 +41,7 @@ def init():
                            pyg.image.load(image_paths['power_up'][1])]
     assets['water']     = [pyg.image.load(image_paths['water'][0]),
                            pyg.image.load(image_paths['water'][1])]
+    assets['plane']     = [pyg.image.load(image_paths['plane'][0])]
     
     load_numbers()
 

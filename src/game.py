@@ -8,6 +8,7 @@ from boat import Boat
 from score import Score
 from powerup import PowerUp
 import artwork
+from plane import Plane
 
 class Game(object):
     def main(self,screen):
@@ -44,7 +45,9 @@ class Game(object):
         boat_health = HealthBar(screen, Vector(win_x - boat_x, 0), (255,0,0))
         boat_health.full_health()
         boat_dead = False
-        boat_health.health = 5 
+        boat_health.health = 5
+        
+        plane = Plane(screen, player)
         
         
         
@@ -185,7 +188,8 @@ class Game(object):
             for explosion in explosions:
                 explosion.display()
             
-            
+            plane.update()
+            plane.display()
                 
             health.display()
             score.display()
