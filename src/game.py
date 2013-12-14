@@ -19,17 +19,18 @@ class Game(object):
         health.full_health()
         score  = Score(screen, Vector(70, 33))
         score.init()
-        score.value = 10000000000 - health.max_health
+        score.value = 0
         bullets = []
         explosions = []
         player_dead = False
+        boat_dead = False
         cool_down = 5
         gun_too_hot = False
         water = (2, 73, 148)
         
         # just mocking game screen for now.
         #numbers = artwork.get_image('numbers',0)
-        score_mock = artwork.get_image('score', 0)
+        score_mock = artwork.get_image('score', 0)  
         wave  = artwork.get_image('wave', 0)
         #nums = []
         #for i in xrange(10):
@@ -67,15 +68,18 @@ class Game(object):
                 move.y += 1
             if key[pyg.K_SPACE]:
                 if not gun_too_hot and not player_dead:
-                    position = player.get_center()
-                    position.y = player.location.y
-                    bullets.append(Bullet(screen, 
-                                         position, 
-                                         radius=1, 
-                                         speed=5, 
-                                         color=(255,255,255)))
+                    #position = player.get_center()
+                    #position.y = player.location.y
+                    player.fire()
+                    
+                    #bullets.append(Bullet(screen, 
+                    #                     position, 
+                    #                     radius=1, 
+                    #                     speed=5, 
+                    #                     color=(255,255,255)))
                     gun_too_hot = True
                     cool_down   = 5
+                    #score.decrease_score(1)
                     
             # self-destruct
             if key[pyg.K_s] and not player_dead:
@@ -101,16 +105,22 @@ class Game(object):
             # movement but only if they aren't dead.
             if not player_dead:
                 player.update(move)
-                boat.update()
-                if boat.is_collision(player.get_rect()):
-                    #player_dead = True
-                    #health.zero_health()
-                    #explosions.append(self.create_explosion(player.get_center()))
-                    health.decrease_health(boat.damage)
+                if not boat_dead:
+                    boat.update()
+                    if boat.is_collision(player.get_rect()):
+                        health.decrease_health(boat.damage)
+            
+            if player.is_collision(boat.get_rect()):
+                boat.take_damage(1)
+                print 'hit boat for 1 damage. %d remaining.' % boat.health
+                if boat.is_alive == False:
+                    explosion = self.create_explosion(boat.location)
+                    explosions.append(explosion)
+                    boat_dead = True
                 
             # always update the bullets
-            for b in bullets:
-                b.update()
+            #for b in bullets:
+            #    b.update()
                 
             # always update the explosions
             for explosion in explosions:
@@ -127,14 +137,14 @@ class Game(object):
             # display our bullets first.
             # but we don't want to display anything if it's outside
             # the screen. We will also remove them.
-            for b in bullets:
-                if b.position.y < 0:
-                    bullets.remove(b)
-                    print 'bullets: %d' % len(bullets)
-                else:
-                    b.display()
-            
-            boat.display()
+            #for b in bullets:
+            #    if b.position.y < 0:
+            #        bullets.remove(b)
+            #        print 'bullets: %d' % len(bullets)
+            #    else:
+            #        b.display()
+            if not boat_dead:
+                boat.display()
             # Display player second so it will
             # draw over top the bullets. 
             # Don't display player if they're dead.
@@ -146,7 +156,7 @@ class Game(object):
             for explosion in explosions:
                 explosion.display()
             
-            health.decrease_health(1)
+            #health.decrease_health(1)
             #if not health.is_full_health():
             #    health.increase_health(1)
                 

@@ -1,5 +1,6 @@
 from vector import Vector
 from vehicle import Vehicle
+from bullet import Bullet
 import artwork
 import pygame as pyg
 
@@ -18,8 +19,29 @@ class Player(Vehicle):
         #self.location = Vector(x/2 - self.img_x/2, y/2 - self.img_y/2)
         self.location = Vector(40,40)
     
+        self.bullets = []
+        self.bullet_speed = 5
+    
     def flip(self):
         pass
+        
+    def fire(self):
+        # find the gun
+        gun = self.get_center()
+        gun.y = self.location.y
+        # create the bullet
+        bullet = Bullet(self.screen, # we'll get rid of screen on this soon
+                            gun, 
+                            1,                 # little pea shooter radius
+                            self.bullet_speed, # speed is positive.
+                            (255,255,255))
+        self.bullets.append(bullet)
+    
+    def is_collision(self, rect):
+        for b in self.bullets:
+            if rect.collidepoint((b.location.x, b.location.y)):
+                self.bullets.remove(b)
+                return True
     
     def get_rect(self):
         return pyg.Rect(self.location.x, self.location.y, self.img_x, self.img_y)
@@ -41,6 +63,16 @@ class Player(Vehicle):
         self.location.add(movement)
         # this movement may have put us outside our boundaries so let's
         # check that.
+        self.check_boundaries()
+        
+        # update all bullets:
+        for b in self.bullets:
+            b.update()
+            if b.alive == False:
+                self.bullets.remove(b)
+                print 'player bullet removed'
+            
+        # now we check boundaries and remove what left the area.
         self.check_boundaries()
         
     def check_boundaries(self):
@@ -73,3 +105,7 @@ class Player(Vehicle):
         super(Player, self).display()
         #img = artwork.get_image(self.name, self.frame)
         #self.screen.blit(img, (self.location.x, self.location.y))
+        
+        # now draw all bullets and they will be on top of the boat.
+        for b in self.bullets:
+            b.display()

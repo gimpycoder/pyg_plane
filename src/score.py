@@ -33,6 +33,10 @@ class Score(object):
         self.value -= amount
         
     def display(self):
+        # no negative scores for this game.
+        if self.value < 0:
+            self.value = 0
+    
         score = str(self)
         location = self.location.get_copy()
         for i in xrange(len(score)):

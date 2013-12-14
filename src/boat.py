@@ -17,6 +17,8 @@ class Boat(Vehicle):
         self.gun_location   = Vector(20, 109)
         self.target         = player
         self.damage         = 10
+        self.health         = 5
+        self.is_alive       = True
         
         # for now we duplicate functionality from the original
         self.img_x, self.img_y = artwork.get_image(self.name, 0).get_size()
@@ -24,9 +26,20 @@ class Boat(Vehicle):
         self.location = Vector(self.max_x/2 - self.img_x/2, 
                                self.max_y/2 - self.img_y/2)
     
+    def get_rect(self):
+        return pyg.Rect(self.location.x, 
+                        self.location.y, 
+                        self.img_x, 
+                        self.img_y)
+    
+    def take_damage(self, amount):
+        self.health -= amount
+        if self.health < 0:
+            self.is_alive = False
+    
     def is_collision(self, rect):
         for b in self.bullets:
-            if rect.collidepoint((b.position.x, b.position.y)):
+            if rect.collidepoint((b.location.x, b.location.y)):
                 self.bullets.remove(b)
                 return True
     
@@ -41,9 +54,13 @@ class Boat(Vehicle):
         # update all bullets.
         for b in self.bullets:
             b.update()
+            if b.alive == False:
+                self.bullets.remove(b)
+                print 'boat bullet removed'
+            
             
         # now we check boundaries and remove what left the area.
-        self.check_boundaries()
+        #self.check_boundaries()
     
     def fire(self):
         # get a random float:
@@ -68,10 +85,10 @@ class Boat(Vehicle):
             self.bullets.append(bullet)
             # now it exists and we wait for update to be called.
             
-    def check_boundaries(self):
-        for b in self.bullets:
-            if b.position.y >= self.max_y:
-                self.bullets.remove(b)
+    #def check_boundaries(self):
+    #    for b in self.bullets:
+    #        if b.location.y >= self.max_y:
+    #            self.bullets.remove(b)
     
     def flip(self):
         self.frame = 1 if (self.frame == 0) else 0

@@ -21,12 +21,12 @@ class Particle(object):
         
         if self.is_shrinking:
             # time to kill this one because it cannot shrink any further.
-            if self.radius == 0 or self.radius - self.power < 0:
+            if self.radius == 0 or self.radius - self.power *3 < 0:
                 self.radius  = 0
                 self.is_dead = True
                 return
             else:
-                self.radius -= self.power
+                self.radius -= self.power * 3
                 return
                 
         elif self.is_exploding:
