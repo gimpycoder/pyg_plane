@@ -16,6 +16,9 @@ image_paths  = {
     'wave'              : ['../res/wave_text.png'],
     'power_up'          : ['../res/power_up_01.png',
                            '../res/power_up_02.png'
+                          ],
+    'water'             : ['../res/water_01.png',
+                           '../res/water_02.png'
                           ]
 }
 
@@ -33,7 +36,9 @@ def init():
     assets['score']     = [pyg.image.load(image_paths['score'][0])]
     assets['wave']      = [pyg.image.load(image_paths['wave'][0])]
     assets['power_up']  = [pyg.image.load(image_paths['power_up'][0]),
-                           pyg.image.load(image_paths['power_up'][1])] 
+                           pyg.image.load(image_paths['power_up'][1])]
+    assets['water']     = [pyg.image.load(image_paths['water'][0]),
+                           pyg.image.load(image_paths['water'][1])]
     
     load_numbers()
 

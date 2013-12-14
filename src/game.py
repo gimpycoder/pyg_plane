@@ -29,6 +29,10 @@ class Game(object):
         gun_too_hot = False
         water = (2, 73, 148)
         
+        water_frame = 0
+        water_img = artwork.get_image('water', water_frame)
+        water_x, water_y = water_img.get_size()
+        
         # just half way up screen.
         power_up = PowerUp(screen, Vector(0, screen.get_size()[1]/2))
         
@@ -42,6 +46,11 @@ class Game(object):
 
         while True:
             clock.tick(30)
+            
+            screen.fill(water)
+            for y in xrange(0, 480, water_y):
+                for x in xrange(0, 640, water_x):
+                    screen.blit(water_img, (x,y))
             
             
             if gun_too_hot:
@@ -135,7 +144,7 @@ class Game(object):
                 explosion.update()
             
             # add water
-            screen.fill(water)
+            #screen.fill(water)
             #screen.fill((0,0,0))
 
             # display our bullets first.
