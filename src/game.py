@@ -6,6 +6,7 @@ from explosion import Explosion
 from health import HealthBar
 from boat import Boat
 from score import Score
+from powerup import PowerUp
 import artwork
 
 class Game(object):
@@ -27,6 +28,9 @@ class Game(object):
         cool_down = 5
         gun_too_hot = False
         water = (2, 73, 148)
+        
+        # just half way up screen.
+        power_up = PowerUp(screen, Vector(0, screen.get_size()[1]/2))
         
         # just mocking game screen for now.
         #numbers = artwork.get_image('numbers',0)
@@ -179,6 +183,10 @@ class Game(object):
             #self.screen.blit(numbers, (70, 55))
             #self.screen.blit(three, (50,200))
             # flip the buffer
+            
+            power_up.update()
+            power_up.display()
+            
             pyg.display.flip()
             #raw_input('...')
             

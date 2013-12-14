@@ -3,24 +3,27 @@ import pygame as pyg
 FRAME_DELAY = 4
 
 image_paths  = {
-    'player' : ['../res/plane.png'],
-    'boat'   : ['../res/boat_a_01.png','../res/boat_a_02.png'],
-    'health' : ['../res/health_bar.png'],
-    'numbers': ['../res/numbers.png'],
-    'score'  : ['../res/score_text.png'],
-    'wave'   : ['../res/wave_text.png']
+    'player'            : ['../res/plane.png'],
+    'boat'              : ['../res/boat_a_01.png','../res/boat_a_02.png'],
+    'health'            : ['../res/health_bar.png'],
+    'numbers'           : ['../res/numbers.png'],
+    'score'             : ['../res/score_text.png'],
+    'wave'              : ['../res/wave_text.png'],
+    'power_up'          : ['../res/power_up_01.png','../res/power_up_02.png']
 }
 
 assets = {}
 
 def init():
-    assets['player'] = [pyg.image.load(image_paths['player'][0])]
-    assets['boat']   = [pyg.image.load(image_paths['boat'][0]),
-                        pyg.image.load(image_paths['boat'][1])]
-    assets['health'] = [pyg.image.load(image_paths['health'][0])]
-    assets['numbers']= [pyg.image.load(image_paths['numbers'][0]).convert()]
-    assets['score']  = [pyg.image.load(image_paths['score'][0])]
-    assets['wave']   = [pyg.image.load(image_paths['wave'][0])]
+    assets['player']    = [pyg.image.load(image_paths['player'][0])]
+    assets['boat']      = [pyg.image.load(image_paths['boat'][0]),
+                           pyg.image.load(image_paths['boat'][1])]
+    assets['health']    = [pyg.image.load(image_paths['health'][0])]
+    assets['numbers']   = [pyg.image.load(image_paths['numbers'][0]).convert()]
+    assets['score']     = [pyg.image.load(image_paths['score'][0])]
+    assets['wave']      = [pyg.image.load(image_paths['wave'][0])]
+    assets['power_up']  = [pyg.image.load(image_paths['power_up'][0]),
+                           pyg.image.load(image_paths['power_up'][1])] 
     
     load_numbers()
 
