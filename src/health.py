@@ -1,20 +1,36 @@
 import pygame as pyg
 import math
 import artwork
+from vector import Vector
 
 class HealthBar(object):
 
-    def __init__(self, screen, location):
+    def __init__(self, screen, location, color=(0,255,0)):
         self.screen   = screen
         self.location = location
         
-        self.top_left     = (7,11)
-        self.top_right    = (132,11)
-        self.bottom_left  = (7,21)
-        self.bottom_right = (132,21)
-        self.height       = abs(self.top_left[1] - self.bottom_left[1])
-        self.width        = abs(self.top_left[0] - self.top_right[0])
-        self.color        = (0, 255, 0)
+        # cannot use constants any longer...
+        #self.top_left     = (7,11)
+        #self.top_right    = (132,11)
+        #self.bottom_left  = (7,21)
+        #self.bottom_right = (132,21)
+        
+        # instead we offset by it.
+        self.top_left     = self.location.get_copy()
+        self.top_left.add(Vector(7,11))
+        
+        self.top_right    = self.location.get_copy()
+        self.top_right.add(Vector(132,11))
+        
+        self.bottom_left  = self.location.get_copy()
+        self.bottom_left.add(Vector(7,21))
+        
+        self.bottom_right = self.location.get_copy()
+        self.bottom_right.add(Vector(132,21))
+        
+        self.height       = abs(self.top_left.y - self.bottom_left.y)
+        self.width        = abs(self.top_left.x - self.top_right.x)
+        self.color        = color
         
         self.max_health   = self.width
         self.health       = 0
@@ -48,8 +64,8 @@ class HealthBar(object):
         self.screen.blit(img, (self.location.x, self.location.y))
         # build our rectangle but only if we still have health.
         if not self.is_dead():
-            bar = pyg.Rect(self.top_left[0], 
-                           self.top_left[1], 
+            bar = pyg.Rect(self.top_left.x, 
+                           self.top_left.y, 
                            self.health, # now we draw it only as long as health.
                            self.height)
                        

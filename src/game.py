@@ -13,51 +13,54 @@ class Game(object):
     def main(self,screen):
         # create the timer
         self.screen = screen
-        clock = pyg.time.Clock() 
+        clock = pyg.time.Clock()
+        
+        
+        
         player = Player(screen)
-        boat = Boat(screen, player)
         health = HealthBar(screen, Vector(0,0))
         health.full_health()
+        cool_down = 5
+        gun_too_hot = False
+        player_dead = False
+        
+        
+        wave  = artwork.get_image('wave', 0)
+        score_mock = artwork.get_image('score', 0) 
         score  = Score(screen, Vector(70, 33))
         score.init()
         score.value = 0
-        bullets = []
-        explosions = []
-        player_dead = False
-        boat_dead = False
-        cool_down = 5
-        gun_too_hot = False
-        water = (2, 73, 148)
         
+        explosions = []
+        
+        boat = Boat(screen, player)
+        boat_x, boat_y = artwork.get_image('health',0).get_size()
+        win_x, win_y = screen.get_size()
+       #0,0                  640,0
+        # [__197px___]       [__197px___]
+        #                    | oops it would draw off screen.
+        #     game area      | So, we subtract the size of the image as well.
+        #                    |
+        boat_health = HealthBar(screen, Vector(win_x - boat_x, 0), (255,0,0))
+        boat_health.full_health()
+        boat_dead = False
+        boat_health.health = 5 
+        
+        
+        
+        water = (2, 73, 148)
         water_frame = 0
         water_img = artwork.get_image('water', water_frame)
         water_x, water_y = water_img.get_size()
         
+        
+        
         # just half way up screen.
         power_up = PowerUp(screen, Vector(0, screen.get_size()[1]/2))
         
-        # just mocking game screen for now.
-        #numbers = artwork.get_image('numbers',0)
-        score_mock = artwork.get_image('score', 0)  
-        wave  = artwork.get_image('wave', 0)
-        #nums = []
-        #for i in xrange(10):
-        #    nums.append(artwork.get_image(str(i), 0))
 
         while True:
             clock.tick(30)
-            
-            screen.fill(water)
-            for y in xrange(0, 480, water_y):
-                for x in xrange(0, 640, water_x):
-                    screen.blit(water_img, (x,y))
-            
-            
-            if gun_too_hot:
-                cool_down -= 1
-                
-            if cool_down < 0:
-                gun_too_hot = False
             
             # process events from queue
             for e in pyg.event.get():
@@ -66,6 +69,26 @@ class Game(object):
                 if e.type == pyg.KEYDOWN and \
                    e.key  == pyg.K_ESCAPE:
                     return
+            
+            
+            
+            
+            # Clear screen and tile background.
+            screen.fill(water)
+            for y in xrange(0, 480, water_y):
+                for x in xrange(0, 640, water_x):
+                    screen.blit(water_img, (x,y))
+            
+            
+            
+            
+            if gun_too_hot:
+                cool_down -= 1
+            if cool_down < 0:
+                gun_too_hot = False
+            
+            
+            
             
             # get the input key
             key = pyg.key.get_pressed()
@@ -81,15 +104,7 @@ class Game(object):
                 move.y += 1
             if key[pyg.K_SPACE]:
                 if not gun_too_hot and not player_dead:
-                    #position = player.get_center()
-                    #position.y = player.location.y
                     player.fire()
-                    
-                    #bullets.append(Bullet(screen, 
-                    #                     position, 
-                    #                     radius=1, 
-                    #                     speed=5, 
-                    #                     color=(255,255,255)))
                     gun_too_hot = True
                     cool_down   = 5
                     #score.decrease_score(1)
@@ -105,6 +120,10 @@ class Game(object):
             
             
             
+            
+            
+            
+            
             if not player_dead:    
                 if health.is_dead():
                     # add an explosion based on where our player is.
@@ -112,6 +131,9 @@ class Game(object):
                     explosion = self.create_explosion(location)
                     explosions.append(explosion)
                     player_dead = True # for now this is good.
+            
+            
+            
             
                 
             # now we update the player's position based on the
@@ -123,17 +145,20 @@ class Game(object):
                     if boat.is_collision(player.get_rect()):
                         health.decrease_health(boat.damage)
             
+            
+            
+            
             if player.is_collision(boat.get_rect()):
-                boat.take_damage(1)
-                print 'hit boat for 1 damage. %d remaining.' % boat.health
-                if boat.is_alive == False:
+                #boat.take_damage(1)
+                boat_health.decrease_health(1)
+                print 'hit boat for 1 damage. %d remaining.' % boat_health.health
+                #if boat.is_alive == False:
+                if boat_health.is_dead():
                     explosion = self.create_explosion(boat.location)
                     explosions.append(explosion)
                     boat_dead = True
-                
-            # always update the bullets
-            #for b in bullets:
-            #    b.update()
+
+
                 
             # always update the explosions
             for explosion in explosions:
@@ -142,20 +167,9 @@ class Game(object):
                     continue
                                 
                 explosion.update()
-            
-            # add water
-            #screen.fill(water)
-            #screen.fill((0,0,0))
 
-            # display our bullets first.
-            # but we don't want to display anything if it's outside
-            # the screen. We will also remove them.
-            #for b in bullets:
-            #    if b.position.y < 0:
-            #        bullets.remove(b)
-            #        print 'bullets: %d' % len(bullets)
-            #    else:
-            #        b.display()
+
+
             if not boat_dead:
                 boat.display()
             # Display player second so it will
@@ -163,38 +177,27 @@ class Game(object):
             # Don't display player if they're dead.
             if not player_dead:
                 player.display()
+            
+            
                     
             # finally display the explosions so they are over
             # top everything.
             for explosion in explosions:
                 explosion.display()
             
-            #health.decrease_health(1)
-            #if not health.is_full_health():
-            #    health.increase_health(1)
+            
                 
             health.display()
-            #x_ = 200
-            #y_ = 20
-            #change = 20
-            #for i in xrange(10):
-            #    self.screen.blit(nums[i], (x_, y_))
-            #    y_ += change
-            
-            score.increase_score(1)
-            #key = str(score)[9]
             score.display()
-            #self.screen.blit(score.digits[key], (200,20))
-            
-            #self.screen.blit(numbers, (70, 33))
             self.screen.blit(score_mock, (5, 33))
             self.screen.blit(wave, (5, 55))
-            #self.screen.blit(numbers, (70, 55))
-            #self.screen.blit(three, (50,200))
-            # flip the buffer
+            
+
             
             power_up.update()
             power_up.display()
+            
+            boat_health.display()
             
             pyg.display.flip()
             #raw_input('...')

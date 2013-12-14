@@ -33,4 +33,6 @@ http://www.dreamincode.net/forums/blog/2274/entry-4619-pygame-keeping-score/
 
 http://www.dreamincode.net/forums/blog/2274/entry-4620-pygame-just-add-water-background/
 
+http://www.dreamincode.net/forums/blog/2274/entry-4622-pygame-managing-health-ii/
+
 more to come...
