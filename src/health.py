@@ -47,7 +47,7 @@ class HealthBar(object):
             self.health = 0
             
     def is_dead(self):
-        return self.health == 0
+        return self.health <= 0
         
     def is_full_health(self):
         return self.health >= self.max_health

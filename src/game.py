@@ -61,6 +61,14 @@ class Game(object):
         # just half way up screen.
         power_up = PowerUp(screen, Vector(0, screen.get_size()[1]/2))
         
+        # tie the Player to the method on health bar that checks if they
+        # are still alive.
+        Player.is_dead = health.is_dead
+        print "player=%s, health-bar=%s" % (player.is_dead(), health.is_dead())
+        
+        # same with boat:
+        Boat.is_dead = boat_health.is_dead
+        
 
         while True:
             clock.tick(30)
@@ -113,17 +121,8 @@ class Game(object):
                     #score.decrease_score(1)
                     
             # self-destruct
-            if key[pyg.K_s] and not player_dead:
-                # add an explosion based on where our player is.
-                location = player.get_center()
-                explosion = self.create_explosion(location)
-                explosions.append(explosion)
-                # kill player:
-                player_dead = True
-            
-            
-            
-            
+            if key[pyg.K_s] and not player.is_dead():
+                health.zero_health()
             
             
             

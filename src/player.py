@@ -3,6 +3,7 @@ from vehicle import Vehicle
 from bullet import Bullet
 import artwork
 import pygame as pyg
+from explosion import Explosion
 
 class Player(Vehicle):
     name = 'player'
@@ -21,6 +22,14 @@ class Player(Vehicle):
     
         self.bullets = []
         self.bullet_speed = 5
+        self.explosion = None
+    
+    def explode(self):
+        self.explosion = Explosion(self.screen,
+                              self.get_center(),
+                              max_power = 100,
+                              max_radius = 200)
+        self.explosion.build(250)
     
     def flip(self):
         if self.frame >= len(artwork.assets['player'])-1:
@@ -107,7 +116,14 @@ class Player(Vehicle):
         self.location.y = y
         
     def display(self):
-        super(Player, self).display()
+        #print 'player exists'
+        if self.is_dead():
+            if not self.explosion:
+                self.explode()
+            self.explosion.update()
+            self.explosion.display()
+        else:
+            super(Player, self).display()
         #img = artwork.get_image(self.name, self.frame)
         #self.screen.blit(img, (self.location.x, self.location.y))
         

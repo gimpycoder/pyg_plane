@@ -25,7 +25,17 @@ class Boat(Vehicle):
         self.max_x, self.max_y  = screen.get_size()
         self.location = Vector(self.max_x/2 - self.img_x/2, 
                                self.max_y/2 - self.img_y/2)
-    
+                               
+        self.explosion = None
+        
+    def explode(self):
+        self.explosion = Explosion(self.screen,
+                              self.get_center(),
+                              max_power = 100,
+                              max_radius = 200)
+        self.explosion.build(250)
+        
+        
     def get_rect(self):
         return pyg.Rect(self.location.x, 
                         self.location.y, 
@@ -94,15 +104,14 @@ class Boat(Vehicle):
         self.frame = 1 if (self.frame == 0) else 0
         
     def display(self):
-        # first draw the boat.
-        #self.frame_delay -= 1
-        #if self.frame_delay <= 0:
-        #    self.flip()
-        #    self.frame_delay = artwork.FRAME_DELAY
-        #
-        #img = artwork.get_image(self.name, self.frame)    
-        #self.screen.blit(img, (self.location.x, self.location.y))
-        super(Boat, self).display()
+        print 'boat exists'
+        if self.is_dead():
+            if not self.explosion:
+                self.explode()
+            self.explosion.update()
+            self.explosion.display()
+        else:
+            super(Boat, self).display()
         
                          
         # now draw all bullets and they will be on top of the boat.

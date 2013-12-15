@@ -78,10 +78,10 @@ class Explosion(object):
         # this explosion's location by the magnitude of our vector.
         location.add(movement)
         # debug printing (fine-tuning particles is hard work!)
-        print "power=%r, radius=%r" % (power, radius)
-        print 'dx=%d,dy=%d' % (dx,dy)
-        print 'center=%s, particle=%s' % (self.location, location)
-        print 'movement=%s' % movement
+        #print "power=%r, radius=%r" % (power, radius)
+        #print 'dx=%d,dy=%d' % (dx,dy)
+        #print 'center=%s, particle=%s' % (self.location, location)
+        #print 'movement=%s' % movement
         # create our particle with this configuration and return it.
         return Particle(location, power, radius)
         
@@ -102,6 +102,7 @@ class Explosion(object):
             #print 'dead explosion'
         
     def display(self):
+        print 'explosion exists'
         if self.is_alive:
             for circle in self.circles:
                 if not circle.is_dead:
