@@ -21,12 +21,12 @@ class Particle(object):
         
         if self.is_shrinking:
             # time to kill this one because it cannot shrink any further.
-            if self.radius == 0 or self.radius - self.power *3 < 0:
+            if self.radius == 0 or self.radius - self.power < 0: # power * 3
                 self.radius  = 0
                 self.is_dead = True
                 return
             else:
-                self.radius -= self.power * 3
+                self.radius -= 1#self.power
                 return
                 
         elif self.is_exploding:
@@ -67,7 +67,10 @@ class Explosion(object):
         dx = random.randint(-1,1)
         dy = random.randint(-1,1)
         # generate a random magnitude to grow our unit vector by.
-        mag = random.randint(-100,30)
+        mag = random.randint(-32, 32) #was -40/40 and it was pretty.
+        # works good... 
+        #mag = random.randint(-100,30)
+        
         # create that actual vector from our random generation.
         movement = Vector(dx,dy)
         # scale our vector by our random magnitude.
@@ -78,10 +81,10 @@ class Explosion(object):
         # this explosion's location by the magnitude of our vector.
         location.add(movement)
         # debug printing (fine-tuning particles is hard work!)
-        #print "power=%r, radius=%r" % (power, radius)
-        #print 'dx=%d,dy=%d' % (dx,dy)
-        #print 'center=%s, particle=%s' % (self.location, location)
-        #print 'movement=%s' % movement
+        print "power=%r, radius=%r" % (power, radius)
+        print 'dx=%d,dy=%d' % (dx,dy)
+        print 'center=%s, particle=%s' % (self.location, location)
+        print 'movement=%s' % movement
         # create our particle with this configuration and return it.
         return Particle(location, power, radius)
         

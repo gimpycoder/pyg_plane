@@ -37,4 +37,6 @@ http://www.dreamincode.net/forums/blog/2274/entry-4622-pygame-managing-health-ii
 
 http://www.dreamincode.net/forums/blog/2274/entry-4623-pygame-air-show-i/
 
+http://www.dreamincode.net/forums/blog/2274/entry-4625-pygame-air-show-ii/
+
 more to come...

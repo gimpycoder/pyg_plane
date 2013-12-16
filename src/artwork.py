@@ -21,6 +21,10 @@ image_paths  = {
                           ],
     'water'             : ['../res/water_01.png',
                            '../res/water_02.png'
+                          ],
+    'title'             : ['../res/title_graphic.png',
+                           '../res/title_menu.png',
+                           '../res/wings_pointer.png'
                           ]
 }
 
@@ -43,12 +47,19 @@ def init():
                            pyg.image.load(image_paths['water'][1])]
     assets['plane']     = [pyg.image.load(image_paths['plane'][0])]
     
+    # Title screen graphics.
+    assets['title']     = [pyg.image.load(image_paths['title'][0]),
+                           pyg.image.load(image_paths['title'][1]),
+                           pyg.image.load(image_paths['title'][2])]
+    
     load_numbers()
     
     # .convert() ensures it's the proper pixel format for the game.
     for (key,value) in assets.iteritems():
         for img in assets[key]:
             img.convert()
+            
+    print 'artwork initialized'
 
 #TODO: Generalize this so that it will load any slides provided
 # need to also include pad value in case we have borders to worry about.
@@ -71,7 +82,7 @@ def get_number(name):
     return get_image(name, 0)
     
 def get_image(name, frame):
-    #print '%r, %d' % (name,frame)
+    print '%r, %d' % (name,frame)
     return assets[name][frame]
     
 def get_frame_count(name):

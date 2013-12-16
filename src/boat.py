@@ -7,7 +7,7 @@ import artwork
 
 class Boat(Vehicle):
     name = 'boat'
-
+    FIRE_RATE = 30
     def __init__(self, screen, player, speed=5, bullet_speed=-5):
         super(Boat, self).__init__(self.name, Vector(0,0))
         self.screen         = screen
@@ -19,6 +19,7 @@ class Boat(Vehicle):
         self.damage         = 10
         self.health         = 5
         self.is_alive       = True
+        self.fire_rate      = self.FIRE_RATE
         
         # for now we duplicate functionality from the original
         self.img_x, self.img_y = artwork.get_image(self.name, 0).get_size()
@@ -58,6 +59,8 @@ class Boat(Vehicle):
                       self.location.y + self.gun_location.y)
         
     def update(self):
+        self.fire_rate -= 1
+    
         # our boat handles its own bullets now.
         # first fire, then update.
         self.fire()
@@ -73,6 +76,13 @@ class Boat(Vehicle):
         #self.check_boundaries()
     
     def fire(self):
+        if self.fire_rate > 0 or self.is_alive == False:
+            return
+            
+        gun = self.get_center()
+        if gun.y > self.target.location.y:
+            return
+    
         # get a random float:
         #chance = random.random()
         # we only fire 8% of the time
@@ -84,7 +94,7 @@ class Boat(Vehicle):
                 return
             
             # find the gun
-            gun = self.get_center()
+            #gun = self.get_center()
             # create the bullet
             bullet = Bullet(self.screen, # we'll get rid of screen on this soon
                             gun, 
@@ -94,6 +104,7 @@ class Boat(Vehicle):
             # add bullet to collection
             self.bullets.append(bullet)
             # now it exists and we wait for update to be called.
+            self.fire_rate = self.FIRE_RATE
             
     #def check_boundaries(self):
     #    for b in self.bullets:

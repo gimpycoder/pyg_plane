@@ -4,11 +4,12 @@ import random
 from bullet import Bullet
 from vehicle import Vehicle
 import artwork
+from explosion import Explosion
 
 class Plane(Vehicle):
     name = 'plane'
-
-    def __init__(self, screen, player, speed=1, bullet_speed=-5):
+    FIRE_RATE = 10
+    def __init__(self, screen, location, player, speed=1, bullet_speed=-5):
         super(Plane, self).__init__(self.name, Vector(0,0))
         self.screen         = screen
         self.bullets        = []
@@ -16,21 +17,42 @@ class Plane(Vehicle):
         self.bullet_speed   = bullet_speed
         self.target         = player
         self.damage         = 10
-        self.health         = 1
+        self.health         = random.randint(1,3)
         self.is_alive       = True
+        self.fire_rate      = self.FIRE_RATE
+        self.points         = 15
+        self.is_offscreen   = False
         
         self.img_x, self.img_y = artwork.get_image(self.name, 0).get_size()
         self.max_x, self.max_y  = screen.get_size()
-        self.location = Vector(40,0)
+        self.location = location
     
         # bottom of the graphic:
         self.gun_location = Vector(self.img_x/2, self.img_y)
+    
+        self.explosion = None
     
     def get_rect(self):
         return pyg.Rect(self.location.x, 
                         self.location.y, 
                         self.img_x, 
                         self.img_y)
+    
+    """
+    def explode(self):
+        self.explosion = Explosion(self.screen,
+                              self.get_center(),
+                              max_power = 15,
+                              max_radius = self.img_x)
+        self.explosion.build(100)
+    """
+    
+    def explode(self):
+        self.explosion = Explosion(self.screen,
+                              self.get_center(),
+                              max_power = 100,#self.img_x/2,
+                              max_radius = 200)#self.img_x*4)
+        self.explosion.build(300)
     
     def take_damage(self, amount):
         self.health -= amount
@@ -48,8 +70,14 @@ class Plane(Vehicle):
                       self.location.y + self.gun_location.y)
         
     def update(self):
+        self.fire_rate -= 1
         # change position by speed:
         self.location.add(Vector(0, self.speed))
+        
+        if self.location.y > self.max_y + self.img_y:
+            self.is_alive = False
+            self.is_offscreen = True
+        
         #print self.location
         # our plane handles its own bullets now.
         # first fire, then update.
@@ -62,6 +90,10 @@ class Plane(Vehicle):
                 #print 'plane bullet removed'
     
     def fire(self):
+        if self.fire_rate > 0 or self.is_alive == False or \
+           self.location.y > self.target.location.y:
+            return
+    
         # get a random float:
         #chance = random.random()
         # we only fire 8% of the time if the player is in line of sight.
@@ -83,6 +115,7 @@ class Plane(Vehicle):
             # add bullet to collection
             self.bullets.append(bullet)
             # now it exists and we wait for update to be called.
+            self.fire_rate = self.FIRE_RATE
     
     def flip(self):
         # no animations yet so we just pass
@@ -90,7 +123,16 @@ class Plane(Vehicle):
         #self.frame = 1 if (self.frame == 0) else 0
         
     def display(self):
-        super(Plane, self).display()
+        if not self.is_offscreen:
+            if not self.is_alive and self.health <= 0:
+                if not self.explosion:
+                    self.explode()
+                self.explosion.update()
+                self.explosion.display()
+            else:
+                super(Plane, self).display()
+        else:
+            self.is_alive = False
         
         # now draw all bullets
         for b in self.bullets:

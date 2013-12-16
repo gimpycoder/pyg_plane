@@ -8,21 +8,22 @@ from explosion import Explosion
 class Player(Vehicle):
     name = 'player'
 
-    def __init__(self, screen, speed=5):
+    def __init__(self, screen, location, speed=5):
         super(Player, self).__init__(self.name, Vector(0,0))
         
         self.screen = screen
         self.speed = speed
-        
+        self.location = Vector(location[0],location[1])
         # for now we duplicate functionality from the original goal.
         self.img_x, self.img_y = artwork.get_image(self.name, 0).get_size()
-        x, y  = screen.get_size()
+        #x, y  = screen.get_size()
         #self.location = Vector(x/2 - self.img_x/2, y/2 - self.img_y/2)
-        self.location = Vector(40,40)
+        #self.location = Vector(40,40)
     
         self.bullets = []
         self.bullet_speed = 5
         self.explosion = None
+        self.MAX_BULLETS = 10
     
     def explode(self):
         self.explosion = Explosion(self.screen,
@@ -40,6 +41,9 @@ class Player(Vehicle):
         #self.frame = 1 if (self.frame == 0) else 0
         
     def fire(self):
+        if len(self.bullets) > self.MAX_BULLETS:
+            return
+    
         # find the gun
         gun = self.get_center()
         gun.y = self.location.y
