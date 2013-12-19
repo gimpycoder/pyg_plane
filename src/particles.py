@@ -7,11 +7,9 @@ from utility import *
 # Classes in File:
 # Explosion
 # Particle (name makes sense with only 1 particle system (explosion)
-
-################################################################################
-
+#===============================================================================
 class Particle(object):
-
+    #___________________________________________________________________________
     def __init__(self, location, power, max_radius=10):
         self.location       = location
         self.power          = power
@@ -27,8 +25,7 @@ class Particle(object):
         print 'max radius: %r' % self.max_radius
         print 'radius: %r' % self.radius
         raw_input('wait')
-        
-        
+    #___________________________________________________________________________    
     def update(self):
         # let's get rid of them first.
         if self.is_dead:
@@ -53,13 +50,14 @@ class Particle(object):
                 return
             else:
                 self.radius += self.power
-
+                
+#===============================================================================
 class Explosion(object):
     colors = [pyg.color.Color("red"), 
               pyg.color.Color("orange"), 
               pyg.color.Color("yellow"), 
               pyg.color.Color("grey")]
-
+    #___________________________________________________________________________
     def __init__(self, screen, location, max_power, max_radius=100):
         self.screen       = screen
         self.location     = location.get_copy()
@@ -68,11 +66,11 @@ class Explosion(object):
         self.circles = []
         
         self.is_alive = True
-    
+    #___________________________________________________________________________
     def build(self, particle_count):
         for i in xrange(particle_count):
             self.circles.append(self.generate_circle())    
-        
+    #___________________________________________________________________________    
     def generate_circle(self):
         # first get a random power between 1 and whatever was maximum.
         power = random.randint(1,self.max_power)
@@ -102,7 +100,7 @@ class Explosion(object):
         print 'movement=%s' % movement
         # create our particle with this configuration and return it.
         return Particle(location, power, radius)
-        
+    #___________________________________________________________________________    
     def update(self):
         if not self.is_alive:
             return
@@ -117,8 +115,7 @@ class Explosion(object):
                 
         if corpses == len(self.circles):
             self.is_alive = False
-            #print 'dead explosion'
-        
+    #___________________________________________________________________________    
     def display(self):
         print 'explosion exists'
         if self.is_alive:

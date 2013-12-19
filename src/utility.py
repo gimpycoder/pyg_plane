@@ -12,43 +12,44 @@ import random
 # CONCEPTS in File: (not classes)
 # Asset Loading
 # Background Building
-
-################################################################################
+#===============================================================================
+# NOTE: This is really poorly designed.... TODO: drop it or fix.
 class Vector(object):
+    #___________________________________________________________________________
     def __init__(self, x, y):
         self.x = float(x)
         self.y = float(y)
-        
+    #___________________________________________________________________________    
     def add(self, other): 
         self.x += other.x
         self.y += other.y
-        
+    #___________________________________________________________________________    
     def sub(self, other):
         self.x -= other.x
         self.y -= other.y
-        
+    #___________________________________________________________________________    
     def mul(self, value):
         self.x *= value
         self.y *= value
-        
+    #___________________________________________________________________________    
     def div(self, value):
         if not value == 0:
             self.x /= value
             self.y /= value
-            
+    #___________________________________________________________________________        
     def mag(self):
         a = self.x**2.0
         b = self.y**2.0
         c = math.sqrt(a + b)
         return c
-        
+    #___________________________________________________________________________    
     def norm(self):
         magnitude = self.mag()
         self.div(magnitude)
-        
+    #___________________________________________________________________________    
     def get_copy(self):
         return copy.copy(self)
-        
+    #___________________________________________________________________________
     def __str__(self):
         return format("x=%r,y=%r" % (self.x,self.y))
         
@@ -57,10 +58,8 @@ class Vector(object):
 # CONCEPTS in File:
 # Asset Loading
 # Background Building
-
-################################################################################
+#===============================================================================
 WATER = (2, 73, 148)
-
 FRAME_DELAY = 4
 
 image_paths  = {
@@ -98,6 +97,7 @@ image_paths  = {
 
 assets = {}
 
+#_______________________________________________________________________________
 def init():
     assets['player']    = [pyg.image.load(image_paths['player'][0]),
                            pyg.image.load(image_paths['player'][1]),
@@ -158,6 +158,7 @@ def init():
             
     print 'artwork initialized'
 
+#_______________________________________________________________________________
 #TODO: Generalize this so that it will load any slides provided
 # need to also include pad value in case we have borders to worry about.
 def load_numbers():
@@ -174,18 +175,18 @@ def load_numbers():
         assets[str(i)] = [cropper.copy()]
         offset += section
         #print 'loaded number %d' % i
-
+#_______________________________________________________________________________
 def get_number(name):
     return get_image(name, 0)
-    
+#_______________________________________________________________________________
 def get_image(name, frame):
     #print '%r, %d' % (name,frame)
     return assets[name][frame]
-    
+#_______________________________________________________________________________    
 def get_frame_count(name):
     return len(assets[name])
     
-################################################################################
+#_______________________________________________________________________________
 def get_background(zone_size, level, frame=0):
     """
     zone_size = 2-tuple dimensions
@@ -210,7 +211,7 @@ def get_background(zone_size, level, frame=0):
                 zone.blit(image, (x,y))
                         
     return zone
-    
+#_______________________________________________________________________________    
 def get_waitground(zone):
     raw_input('waitground')
     size_x, size_y = zone.get_size()

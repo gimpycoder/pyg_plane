@@ -16,7 +16,7 @@ Y = 1
 #===============================================================================
 class WarZone(object):
 
-    #---------------------------------------------------------------------------
+    #___________________________________________________________________________
     def __init__(self, screen, level=1, lives=3, score=0):
         self.screen = screen
         self.screen_size = self.screen.get_size()
@@ -55,7 +55,7 @@ class WarZone(object):
 
         self.clock = pygame.time.Clock()
 
-    #---------------------------------------------------------------------------
+    #___________________________________________________________________________
     # Currently not operational and quite messy.
     def menu(self):
         
@@ -85,7 +85,7 @@ class WarZone(object):
                     print '%d,%d' % (mouse_x, mouse_y)
             
     
-    #---------------------------------------------------------------------------
+    #___________________________________________________________________________
     # We enter this when a life has expired or the game is just starting.
     def new_game(self):
         print 'new_game'
@@ -96,7 +96,7 @@ class WarZone(object):
             # continue screen maybe?
             print 'quitting'
     
-    #---------------------------------------------------------------------------
+    #___________________________________________________________________________
     # This loop goes on until the player is dead.
     def fight(self):
         
@@ -174,7 +174,6 @@ class WarZone(object):
             # more debug aspects going here...
             # increase score by one to make sure it works right.
             self.score.increase_score(1)
-                  
             #-------------------------------------------------------------------
             
             
@@ -208,15 +207,12 @@ class WarZone(object):
         # then..
         
         
-        
-        
-        
         # these are normally going to be set on a condition of zero health
         self.alive = False
         self.lives -= 1
         self.dead()
     
-    #---------------------------------------------------------------------------
+    #___________________________________________________________________________
     # Displayed between lives with a "GET READY" flashing message if there are
     # lives left. Otherwise flashes game over.
     def dead(self):
