@@ -1,7 +1,14 @@
+import math, random
 import pygame as pyg
-import math
-from vector import Vector
-import random
+from utility import *
+
+################################################################################
+# PARTICLE SYSTEMS IN THE GAME.
+# Classes in File:
+# Explosion
+# Particle (name makes sense with only 1 particle system (explosion)
+
+################################################################################
 
 class Particle(object):
 
@@ -13,6 +20,14 @@ class Particle(object):
         self.is_exploding   = True
         self.is_shrinking   = False
         self.is_dead        = False
+        
+        print 'PARTICLE'
+        print 'location: %s' % self.location
+        print 'power: %r' % self.power
+        print 'max radius: %r' % self.max_radius
+        print 'radius: %r' % self.radius
+        raw_input('wait')
+        
         
     def update(self):
         # let's get rid of them first.

@@ -1,13 +1,67 @@
-import pygame as pyg
 import math
-import artwork
-from vector import Vector
+import pygame as pyg
+from utility import *
 
+################################################################################
+# ALL ENTITIES THAT ARE NOT DIRECTLY IN PLAY (user interface related)
+# Classes in File:
+# Score
+# HealthBar
+
+################################################################################
+class Score(object):
+    name = 'score_sheet'
+
+    def __init__(self, screen, location):
+        self.screen = screen
+        self.value = 0
+        self.max_value = 9999999999
+        self.digits = {}
+        self.location = Vector(location[0], location[1])
+        self.width = 0
+        self.init()
+
+    def init(self):
+        for i in xrange(10):
+            self.digits[str(i)] = get_number(str(i))
+            
+        self.width = self.digits['0'].get_size()[0] + 2
+        print self.width
+
+    def increase_score(self, amount):
+        if self.value + amount > self.max_value:
+            self.value = self.max_value
+            
+        self.value += amount
+        
+    def decrease_score(self, amount):
+        if self.value - amount < 0:
+            self.value = 0
+            
+        self.value -= amount
+        
+    def display(self):
+        # no negative scores for this game.
+        if self.value < 0:
+            self.value = 0
+    
+        score = str(self)
+        location = self.location.get_copy()
+        for i in xrange(len(score)):
+            img = self.digits[score[i]]
+            self.screen.blit(img, (location.x, location.y))
+            location.x += self.width
+            #print location
+        
+    def __str__(self):
+        return str(self.value).rjust(10, '0')
+        
+################################################################################
 class HealthBar(object):
 
     def __init__(self, screen, location, color=(0,255,0)):
         self.screen   = screen
-        self.location = location
+        self.location = Vector(location[0], location[1])
         
         # cannot use constants any longer...
         #self.top_left     = (7,11)
@@ -34,7 +88,7 @@ class HealthBar(object):
         
         self.max_health   = self.width
         self.health       = 0
-        print '%s' % str(artwork.get_image('health', 0).get_size())
+        #print '%s' % str(artwork.get_image('health', 0).get_size())
         
     def increase_health(self, amount):
         self.health += amount
@@ -47,6 +101,9 @@ class HealthBar(object):
             self.health = 0
             
     def is_dead(self):
+        if self.health <= 0:
+            print 'dead'
+            raw_input('health.py')
         return self.health <= 0
         
     def is_full_health(self):
@@ -60,7 +117,7 @@ class HealthBar(object):
         
     def display(self):
         # first draw our image.
-        img = artwork.get_image('health', 0)
+        img = get_image('health', 0)
         self.screen.blit(img, (self.location.x, self.location.y))
         # build our rectangle but only if we still have health.
         if not self.is_dead():
@@ -72,4 +129,3 @@ class HealthBar(object):
             # draw our rectangle on top of the image
             # 0 width means fill rectangle.
             pyg.draw.rect(self.screen, self.color, bar, 0)
-        
