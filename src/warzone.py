@@ -194,6 +194,10 @@ class WarZone(object):
                 
             for p in planes:
                 p.update()
+                if p.is_offscreen:
+                    planes.remove(p)
+                    print 'plane removed'
+                    continue
                 p.display()
             
             self.score.display()
