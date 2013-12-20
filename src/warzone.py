@@ -156,7 +156,7 @@ class WarZone(object):
             if wait <= 0:
                 chance = random.random()
                 print 'chance = %.2f' % chance
-                if chance < .2:
+                if chance < .5:
                     print 'plane built'
                     x = random.randint(20, 600)
                     planes.append(Plane(self.screen, Vector(x, 0), player))

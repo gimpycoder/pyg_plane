@@ -70,7 +70,96 @@ image_paths  = {
     'boat'              : ['../res/boat_a_01.png',
                            '../res/boat_a_02.png'
                           ],
-    'plane'             : ['../res/plane_a_01.png'],
+    
+    'olive-plane'       : ['../res/planes/olive_01.png',
+                           '../res/planes/olive_02.png',
+                           '../res/planes/olive_03.png',
+                           '../res/planes/olive_04.png',   # south
+                           '../res/planes/olive_05.png',   # south-east
+                           '../res/planes/olive_06.png',   # east
+                           '../res/planes/olive_07.png',   # north-east
+                           '../res/planes/olive_08.png',   # north
+                           '../res/planes/olive_09.png',   # north-west
+                           '../res/planes/olive_10.png',   # west
+                           '../res/planes/olive_11.png',   # south-west
+                           '../res/planes/olive_12.png',   # flip 01
+                           '../res/planes/olive_13.png',   # flip 02
+                           '../res/planes/olive_14.png',   # flip 03
+                           '../res/planes/olive_15.png',   # flip 04
+                           '../res/planes/olive_16.png',   # flip 05
+                           '../res/planes/olive_17.png',   # upside down 01
+                           '../res/planes/olive_18.png'],  # upside down 02
+                           
+    'white-plane'       : ['../res/planes/white_01.png',
+                           '../res/planes/white_02.png',
+                           '../res/planes/white_03.png',
+                           '../res/planes/white_04.png',   # south
+                           '../res/planes/white_05.png',   # south-east
+                           '../res/planes/white_06.png',   # east
+                           '../res/planes/white_07.png',   # north-east
+                           '../res/planes/white_08.png',   # north
+                           '../res/planes/white_09.png',   # north-west
+                           '../res/planes/white_10.png',   # west
+                           '../res/planes/white_11.png',   # south-west
+                           '../res/planes/white_12.png',   # flip 01
+                           '../res/planes/white_13.png',   # flip 02
+                           '../res/planes/white_14.png',   # flip 03
+                           '../res/planes/white_15.png',   # flip 04
+                           '../res/planes/white_16.png',   # flip 05
+                           '../res/planes/white_17.png',   # upside down 01
+                           '../res/planes/white_18.png'],  # upside down 02
+                           
+    'green-plane'       : ['../res/planes/green_01.png',
+                           '../res/planes/green_02.png',
+                           '../res/planes/green_03.png',
+                           '../res/planes/green_04.png',   # south
+                           '../res/planes/green_05.png',   # south-east
+                           '../res/planes/green_06.png',   # east
+                           '../res/planes/green_07.png',   # north-east
+                           '../res/planes/green_08.png',   # north
+                           '../res/planes/green_09.png',   # north-west
+                           '../res/planes/green_10.png',   # west
+                           '../res/planes/green_11.png',   # south-west
+                           '../res/planes/green_12.png',   # flip 01
+                           '../res/planes/green_13.png',   # flip 02
+                           '../res/planes/green_14.png',   # flip 03
+                           '../res/planes/green_15.png',   # flip 04
+                           '../res/planes/green_16.png',   # flip 05
+                           '../res/planes/green_17.png',   # upside down 01
+                           '../res/planes/green_18.png'],  # upside down 02
+                           
+    'blue-plane'        : ['../res/planes/blue_01.png',
+                           '../res/planes/blue_02.png',
+                           '../res/planes/blue_03.png',
+                           '../res/planes/blue_04.png',   # south
+                           '../res/planes/blue_05.png',   # south-east
+                           '../res/planes/blue_06.png',   # east
+                           '../res/planes/blue_07.png',   # north-east
+                           '../res/planes/blue_08.png',   # north
+                           '../res/planes/blue_09.png',   # north-west
+                           '../res/planes/blue_10.png',   # west
+                           '../res/planes/blue_11.png',   # south-west
+                           '../res/planes/blue_12.png',   # flip 01
+                           '../res/planes/blue_13.png',   # flip 02
+                           '../res/planes/blue_14.png',   # flip 03
+                           '../res/planes/blue_15.png',   # flip 04
+                           '../res/planes/blue_16.png',   # flip 05
+                           '../res/planes/blue_17.png',   # upside down 01
+                           '../res/planes/blue_18.png'],  # upside down 02
+                           
+                           
+    'orange-plane'      : ['../res/planes/orange_01.png',
+                           '../res/planes/orange_02.png',
+                           '../res/planes/orange_03.png',
+                           '../res/planes/orange_04.png',  # south
+                           '../res/planes/orange_05.png',  # south-east
+                           '../res/planes/orange_06.png',  # east
+                           '../res/planes/orange_07.png',  # north-east
+                           '../res/planes/orange_08.png',  # north
+                           '../res/planes/orange_09.png',  # north-west
+                           '../res/planes/orange_10.png',  # west
+                           '../res/planes/orange_11.png'], # south-west
+                                                           # NO FLIP!
                           
     'health'            : ['../res/health_bar.png'],
     'numbers'           : ['../res/numbers.png'],
@@ -113,7 +202,94 @@ def init():
                            pyg.image.load(image_paths['power_up'][1])]
     assets['water']     = [pyg.image.load(image_paths['water'][0]),
                            pyg.image.load(image_paths['water'][1])]
-    assets['plane']     = [pyg.image.load(image_paths['plane'][0])]
+    
+    assets['olive-plane'] = [pyg.image.load(image_paths['olive-plane'][0]),
+                             pyg.image.load(image_paths['olive-plane'][1]),
+                             pyg.image.load(image_paths['olive-plane'][2]),
+                             pyg.image.load(image_paths['olive-plane'][3]),
+                             pyg.image.load(image_paths['olive-plane'][4]),
+                             pyg.image.load(image_paths['olive-plane'][5]),
+                             pyg.image.load(image_paths['olive-plane'][6]),
+                             pyg.image.load(image_paths['olive-plane'][7]),
+                             pyg.image.load(image_paths['olive-plane'][8]),
+                             pyg.image.load(image_paths['olive-plane'][9]),
+                             pyg.image.load(image_paths['olive-plane'][10]),
+                             pyg.image.load(image_paths['olive-plane'][11]),
+                             pyg.image.load(image_paths['olive-plane'][12]),
+                             pyg.image.load(image_paths['olive-plane'][13]),
+                             pyg.image.load(image_paths['olive-plane'][14]),
+                             pyg.image.load(image_paths['olive-plane'][15]),
+                             pyg.image.load(image_paths['olive-plane'][16]),
+                             pyg.image.load(image_paths['olive-plane'][17])]
+                             
+    assets['white-plane'] = [pyg.image.load(image_paths['white-plane'][0]),
+                             pyg.image.load(image_paths['white-plane'][1]),
+                             pyg.image.load(image_paths['white-plane'][2]),
+                             pyg.image.load(image_paths['white-plane'][3]),
+                             pyg.image.load(image_paths['white-plane'][4]),
+                             pyg.image.load(image_paths['white-plane'][5]),
+                             pyg.image.load(image_paths['white-plane'][6]),
+                             pyg.image.load(image_paths['white-plane'][7]),
+                             pyg.image.load(image_paths['white-plane'][8]),
+                             pyg.image.load(image_paths['white-plane'][9]),
+                             pyg.image.load(image_paths['white-plane'][10]),
+                             pyg.image.load(image_paths['white-plane'][11]),
+                             pyg.image.load(image_paths['white-plane'][12]),
+                             pyg.image.load(image_paths['white-plane'][13]),
+                             pyg.image.load(image_paths['white-plane'][14]),
+                             pyg.image.load(image_paths['white-plane'][15]),
+                             pyg.image.load(image_paths['white-plane'][16]),
+                             pyg.image.load(image_paths['white-plane'][17])]
+                             
+    assets['green-plane'] = [pyg.image.load(image_paths['green-plane'][0]),
+                             pyg.image.load(image_paths['green-plane'][1]),
+                             pyg.image.load(image_paths['green-plane'][2]),
+                             pyg.image.load(image_paths['green-plane'][3]),
+                             pyg.image.load(image_paths['green-plane'][4]),
+                             pyg.image.load(image_paths['green-plane'][5]),
+                             pyg.image.load(image_paths['green-plane'][6]),
+                             pyg.image.load(image_paths['green-plane'][7]),
+                             pyg.image.load(image_paths['green-plane'][8]),
+                             pyg.image.load(image_paths['green-plane'][9]),
+                             pyg.image.load(image_paths['green-plane'][10]),
+                             pyg.image.load(image_paths['green-plane'][11]),
+                             pyg.image.load(image_paths['green-plane'][12]),
+                             pyg.image.load(image_paths['green-plane'][13]),
+                             pyg.image.load(image_paths['green-plane'][14]),
+                             pyg.image.load(image_paths['green-plane'][15]),
+                             pyg.image.load(image_paths['green-plane'][16]),
+                             pyg.image.load(image_paths['green-plane'][17])]
+                             
+    assets['blue-plane']  = [pyg.image.load(image_paths['blue-plane'][0]),
+                             pyg.image.load(image_paths['blue-plane'][1]),
+                             pyg.image.load(image_paths['blue-plane'][2]),
+                             pyg.image.load(image_paths['blue-plane'][3]),
+                             pyg.image.load(image_paths['blue-plane'][4]),
+                             pyg.image.load(image_paths['blue-plane'][5]),
+                             pyg.image.load(image_paths['blue-plane'][6]),
+                             pyg.image.load(image_paths['blue-plane'][7]),
+                             pyg.image.load(image_paths['blue-plane'][8]),
+                             pyg.image.load(image_paths['blue-plane'][9]),
+                             pyg.image.load(image_paths['blue-plane'][10]),
+                             pyg.image.load(image_paths['blue-plane'][11]),
+                             pyg.image.load(image_paths['blue-plane'][12]),
+                             pyg.image.load(image_paths['blue-plane'][13]),
+                             pyg.image.load(image_paths['blue-plane'][14]),
+                             pyg.image.load(image_paths['blue-plane'][15]),
+                             pyg.image.load(image_paths['blue-plane'][16]),
+                             pyg.image.load(image_paths['blue-plane'][17])]
+                             
+    assets['orange-plane']= [pyg.image.load(image_paths['orange-plane'][0]),
+                             pyg.image.load(image_paths['orange-plane'][1]),
+                             pyg.image.load(image_paths['orange-plane'][2]),
+                             pyg.image.load(image_paths['orange-plane'][3]),
+                             pyg.image.load(image_paths['orange-plane'][4]),
+                             pyg.image.load(image_paths['orange-plane'][5]),
+                             pyg.image.load(image_paths['orange-plane'][6]),
+                             pyg.image.load(image_paths['orange-plane'][7]),
+                             pyg.image.load(image_paths['orange-plane'][8]),
+                             pyg.image.load(image_paths['orange-plane'][9]),
+                             pyg.image.load(image_paths['orange-plane'][10])]
     
     # Title screen graphics.
     assets['title']     = [pyg.image.load(image_paths['title'][0]),
@@ -193,7 +369,6 @@ def get_background(zone_size, level, frame=0):
     level = which level the player is on.
     frame = which frame in the collection is desired.
     """
-    
     zone = pyg.Surface(zone_size).convert()
     
     if level == 0:

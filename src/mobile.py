@@ -74,7 +74,7 @@ class Vehicle(object):
         self.name               = name
         self.location           = location
         self.frame_count        = get_frame_count(self.name)
-        self.frame_delay        = FRAME_DELAY
+        self.frame_delay        = 2
         self.frame              = 0
         
         self.animation = self.flip()
@@ -93,10 +93,10 @@ class Vehicle(object):
     
     #___________________________________________________________________________
     def update(self):
-        self.frame_delay -= 1
-        if self.frame_delay <= 0:
-            self.animation.next()
-            self.frame_delay = FRAME_DELAY
+        #self.frame_delay -= 1
+        #if self.frame_delay <= 0:
+        self.animation.next()
+        #    self.frame_delay = FRAME_DELAY
     
     #___________________________________________________________________________    
     def display(self):
@@ -264,7 +264,6 @@ class Boat(Vehicle):
                                self.max_y/2 - self.img_y/2)
                                
         self.explosion = None
-    
     #___________________________________________________________________________    
     def explode(self):
         self.explosion = Explosion(self.screen,
@@ -281,7 +280,6 @@ class Boat(Vehicle):
                         self.img_y)
     
     #___________________________________________________________________________
-            self.is_alive = False
     def take_damage(self, amount):
         self.health -= amount
         if self.health < 0:
@@ -363,10 +361,14 @@ class Boat(Vehicle):
 
 #===============================================================================
 class Plane(Vehicle):
-    name = 'plane'
+    names = ['olive-plane','white-plane','green-plane',
+             'blue-plane','orange-plane'
+    ]
+    name = 'orange-plane'
     FIRE_RATE = 10
     #___________________________________________________________________________
     def __init__(self, screen, location, player, speed=1, bullet_speed=-5):
+        self.name = random.choice(self.names)
         super(Plane, self).__init__(self.name, Vector(0,0))
         self.screen         = screen
         self.bullets        = []
