@@ -2,6 +2,10 @@ import random, math
 import pygame as pyg
 from utility import *
 from particles import Explosion # I want to get this out of here...
+
+X = 0
+Y = 1
+
 ################################################################################
 # ALL ENTITIES THAT MOVE
 # Classes in File:
@@ -14,14 +18,16 @@ from particles import Explosion # I want to get this out of here...
 
 #===============================================================================
 class Bullet(object):
-
+    # power 0 = little pea shooter (standard bullet)
     #___________________________________________________________________________
-    def __init__(self, screen, location, radius, speed=5, color=(255,255,255)):
+    def __init__(self, screen, location, radius, power=0, speed=5, color=(255,255,255)):
         self.screen = screen
         self.location = location
         self.radius = radius
+        self.power  = power
         self.speed = speed
         self.color = color
+        self.image = get_image('bullet', power)
         self.alive = True
     
     #___________________________________________________________________________   
@@ -50,11 +56,13 @@ class Bullet(object):
     #___________________________________________________________________________    
     def display(self):
         if self.alive:
-            pyg.draw.circle(self.screen, 
-                            self.color, 
-                            (int(self.location.x), int(self.location.y)), 
-                            self.radius, 
-                            0) # 0 fills in the circle
+            self.screen.blit(self.image, (self.location.x, self.location.y))
+        
+            #pyg.draw.circle(self.screen, 
+            #                self.color, 
+            #                (int(self.location.x), int(self.location.y)), 
+            #                self.radius, 
+            #                0) # 0 fills in the circle
                             
 #===============================================================================
 # This is pretty much the container for artwork tied to the mobiles in the game
@@ -146,7 +154,7 @@ class Player(Vehicle):
     #___________________________________________________________________________
     # The player does not have a cool-down because firing is tied to KEYDOWN
     # which means the player has to pump it.
-    def __init__(self, screen, location, speed=5):
+    def __init__(self, screen, location, speed=5, power=0):
         """
         screen = The Surface object to draw on during Display()
         location = 2-tuple (x,y) of where the player starts.
@@ -166,6 +174,7 @@ class Player(Vehicle):
         self.img_x, self.img_y = get_image(self.name, 0).get_size()
         self.bullets = []
         self.bullet_speed = 5
+        self.power = power
     
     #___________________________________________________________________________
     # Here is where bullets are added to the collection. The bullets start at
@@ -177,6 +186,7 @@ class Player(Vehicle):
         bullet = Bullet(self.screen, # we'll get rid of screen on this soon
                             gun, 
                             1,                 # little pea shooter radius
+                            self.power,
                             self.bullet_speed, # speed is positive.
                             (255,255,255))
         self.bullets.append(bullet)
@@ -213,7 +223,8 @@ class Player(Vehicle):
     # sufficient.
     def get_center(self):
         location = self.location.get_copy()
-        x,y = (self.img_x/2, self.img_y/2)
+        b_x, b_y = get_image('bullet', self.power).get_size()
+        x,y = (self.img_x/2-b_x/2, self.img_y/2)
         location.add(Vector(x,y))
         return location
     
@@ -364,7 +375,7 @@ class Plane(Vehicle):
     names = ['olive-plane','white-plane','green-plane',
              'blue-plane','orange-plane'
     ]
-    name = 'orange-plane'
+    name = 'olive-plane'
     FIRE_RATE = 10
     #___________________________________________________________________________
     def __init__(self, screen, location, player, speed=1, bullet_speed=-5):
@@ -377,10 +388,12 @@ class Plane(Vehicle):
         self.target         = player
         self.damage         = 10
         self.health         = random.randint(1,3)
-        self.is_alive       = True
+        self.is_alive       = False
         self.fire_rate      = self.FIRE_RATE
         self.points         = 15
         self.is_offscreen   = False
+        
+        self.boundaries = self.screen.get_rect()
         
         self.img_x, self.img_y = get_image(self.name, 0).get_size()
         self.max_x, self.max_y  = screen.get_size()
@@ -390,6 +403,14 @@ class Plane(Vehicle):
         self.gun_location = Vector(self.img_x/2, self.img_y)
     
         self.explosion = None
+        
+        self.idle_anim = [self.frames[0], self.frames[1], self.frames[2]]
+        if not self.name == 'orange-plane':
+            self.flip_anim = [self.frames[11], self.frames[12], self.frames[13],
+                              self.frames[14], self.frames[15]]
+            self.flipped_anim = [self.frames[16], self.frames[17]]
+        self.frames = self.idle_anim
+        
         super(Plane, self).update()
     
     #___________________________________________________________________________
@@ -424,9 +445,19 @@ class Plane(Vehicle):
         # change position by speed:
         self.location.add(Vector(0, self.speed))
         
-        if self.location.y > self.max_y + self.img_y:
+        if self.boundaries.collidepoint((self.location.x, self.location.y)):
+            self.is_alive = True
+        
+        if not self.boundaries.collidepoint((self.location.x, self.location.y)) and \
+           self.is_alive == True:
+        #if self.location.y > self.max_y + self.img_y:
             self.is_alive = False
             self.is_offscreen = True
+        
+        if self.name is not 'orange-plane':
+            if self.location.y > self.max_y/2:
+                self.frames = self.flip_anim
+                self.speed = -self.speed
         
         #print self.location
         # our plane handles its own bullets now.

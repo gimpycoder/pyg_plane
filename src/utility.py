@@ -67,6 +67,12 @@ image_paths  = {
                            '../res/hero_02.png', 
                            '../res/hero_03.png'
                           ],
+                          
+    'bullet'            : ['../res/bullet_01.png',
+                           '../res/bullet_02.png',
+                           '../res/bullet_03.png',
+                           '../res/bullet_04.png'],
+                          
     'boat'              : ['../res/boat_a_01.png',
                            '../res/boat_a_02.png'
                           ],
@@ -192,6 +198,11 @@ def init():
                            pyg.image.load(image_paths['player'][1]),
                            pyg.image.load(image_paths['player'][2])]
                            
+    assets['bullet']    = [pyg.image.load(image_paths['bullet'][0]),
+                           pyg.image.load(image_paths['bullet'][1]),
+                           pyg.image.load(image_paths['bullet'][2]),
+                           pyg.image.load(image_paths['bullet'][3])]
+                           
     assets['boat']      = [pyg.image.load(image_paths['boat'][0]),
                            pyg.image.load(image_paths['boat'][1])]
     assets['health']    = [pyg.image.load(image_paths['health'][0])]
@@ -214,12 +225,19 @@ def init():
                              pyg.image.load(image_paths['olive-plane'][8]),
                              pyg.image.load(image_paths['olive-plane'][9]),
                              pyg.image.load(image_paths['olive-plane'][10]),
+                             # flip 01
                              pyg.image.load(image_paths['olive-plane'][11]),
+                             # flip 02
                              pyg.image.load(image_paths['olive-plane'][12]),
+                             # flip 03
                              pyg.image.load(image_paths['olive-plane'][13]),
+                             # flip 04
                              pyg.image.load(image_paths['olive-plane'][14]),
+                             # flip 05
                              pyg.image.load(image_paths['olive-plane'][15]),
+                             # upside down 01
                              pyg.image.load(image_paths['olive-plane'][16]),
+                             # upside down 02
                              pyg.image.load(image_paths['olive-plane'][17])]
                              
     assets['white-plane'] = [pyg.image.load(image_paths['white-plane'][0]),

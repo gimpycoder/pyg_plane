@@ -104,8 +104,8 @@ class WarZone(object):
         player = Player(self.screen, 
                        (self.start_location[X], self.start_location[Y]))
                        
-        boat = Boat(self.screen, player)
-        planes = []
+        #boat = Boat(self.screen, player)
+        #planes = []
     
         fighting = True
         background = self.background1
@@ -128,6 +128,10 @@ class WarZone(object):
                 if e.type == KEYDOWN:
                    if e.key  == K_ESCAPE:
                     return
+                   elif e.key == K_q:
+                    player.power += 1
+                    if player.power > 3:
+                        player.power = 0
                    elif e.key == K_SPACE:
                     player.fire()
                     
@@ -148,7 +152,7 @@ class WarZone(object):
 
 
             player.update(move)
-            boat.update()
+            #boat.update()
 
             #-------------------------------------------------------------------
             # Change background might be a little overkill because I think it
@@ -159,7 +163,7 @@ class WarZone(object):
                 if chance < .5:
                     print 'plane built'
                     x = random.randint(20, 600)
-                    planes.append(Plane(self.screen, Vector(x, 0), player))
+                    #planes.append(Plane(self.screen, Vector(x, 0), player))
             
                 if background == self.background1:
                     print 'scene change to 2'
@@ -181,7 +185,7 @@ class WarZone(object):
             self.screen.blit(background, (0,0))
             
             player.display()
-            boat.display()
+            #boat.display()
             
             live_x = 0
             live_y = 0
@@ -192,17 +196,17 @@ class WarZone(object):
                 self.screen.blit(self.lives_image, (live_x + 7,live_y + 20))
                 live_x += lives_size
                 
-            for p in planes:
-                p.update()
-                if p.is_offscreen:
-                    planes.remove(p)
-                    print 'plane removed'
-                    continue
-                p.display()
+            #for p in planes:
+            #    p.update()
+            #    if p.is_offscreen:
+            #        planes.remove(p)
+            #        print 'plane removed'
+            #        continue
+            #    p.display()
             
             self.score.display()
             self.health_bar.display()
-            self.boat_health_bar.display()
+            #self.boat_health_bar.display()
             
             pygame.display.flip()
             wait -= 1
