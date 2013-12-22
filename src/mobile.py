@@ -175,6 +175,16 @@ class Player(Vehicle):
         self.bullets = []
         self.bullet_speed = 5
         self.power = power
+        
+        self.left_buddy = get_image('buddy',0)
+        self.left_buddy_location = self.location.get_copy()
+        self.left_buddy_location.x -= 32
+        self.left_buddy_location.y += 14
+        
+        self.right_buddy = get_image('buddy',0)
+        self.right_buddy_location = self.location.get_copy()
+        self.right_buddy_location.x += 67
+        self.right_buddy_location.y += 14
     
     #___________________________________________________________________________
     # Here is where bullets are added to the collection. The bullets start at
@@ -182,6 +192,12 @@ class Player(Vehicle):
     def fire(self):
         gun = self.get_center()
         gun.y = self.location.y
+        
+        left_b_gun = gun.get_copy()
+        left_b_gun.x -= 32 + 32/2
+        right_b_gun = gun.get_copy()
+        right_b_gun.x += 32 + 32/2 + 2
+        
         # create the bullet
         bullet = Bullet(self.screen, # we'll get rid of screen on this soon
                             gun, 
@@ -189,6 +205,25 @@ class Player(Vehicle):
                             self.power,
                             self.bullet_speed, # speed is positive.
                             (255,255,255))
+                            
+        self.bullets.append(bullet)
+                            
+        bullet = Bullet(self.screen, # we'll get rid of screen on this soon
+                            left_b_gun, 
+                            1,                 # little pea shooter radius
+                            self.power,
+                            self.bullet_speed, # speed is positive.
+                            (255,255,255))
+                            
+        self.bullets.append(bullet)
+        
+        bullet = Bullet(self.screen, # we'll get rid of screen on this soon
+                            right_b_gun, 
+                            1,                 # little pea shooter radius
+                            self.power,
+                            self.bullet_speed, # speed is positive.
+                            (255,255,255))
+                            
         self.bullets.append(bullet)
     
     #___________________________________________________________________________
@@ -235,7 +270,8 @@ class Player(Vehicle):
         super(Player, self).update()
         movement.mul(self.speed)
         self.location.add(movement)
-        
+        self.left_buddy_location.add(movement)
+        self.right_buddy_location.add(movement)
         # update all bullets:
         for b in self.bullets:
             b.update()
@@ -245,7 +281,8 @@ class Player(Vehicle):
     #___________________________________________________________________________    
     def display(self):
         super(Player, self).display()
-        
+        self.screen.blit(self.left_buddy, (self.left_buddy_location.x, self.left_buddy_location.y))
+        self.screen.blit(self.right_buddy, (self.right_buddy_location.x, self.right_buddy_location.y))
         for b in self.bullets:
             b.display()
             
@@ -454,7 +491,7 @@ class Plane(Vehicle):
             self.is_alive = False
             self.is_offscreen = True
         
-        if self.name is not 'orange-plane':
+        if not self.name == 'orange-plane':
             if self.location.y > self.max_y/2:
                 self.frames = self.flip_anim
                 self.speed = -self.speed
@@ -492,6 +529,7 @@ class Plane(Vehicle):
             bullet = Bullet(self.screen, # we'll get rid of screen on this soon
                             gun, 
                             1,                 # little pea shooter radius
+                            0,
                             self.bullet_speed, # speed is negative so it adds.
                             (255,255,255))
             # add bullet to collection

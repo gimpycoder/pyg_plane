@@ -68,6 +68,8 @@ image_paths  = {
                            '../res/hero_03.png'
                           ],
                           
+    'buddy'             : ['../res/buddy.png'],
+                          
     'bullet'            : ['../res/bullet_01.png',
                            '../res/bullet_02.png',
                            '../res/bullet_03.png',
@@ -197,6 +199,8 @@ def init():
     assets['player']    = [pyg.image.load(image_paths['player'][0]),
                            pyg.image.load(image_paths['player'][1]),
                            pyg.image.load(image_paths['player'][2])]
+                           
+    assets['buddy']     = [pyg.image.load(image_paths['buddy'][0])]
                            
     assets['bullet']    = [pyg.image.load(image_paths['bullet'][0]),
                            pyg.image.load(image_paths['bullet'][1]),
