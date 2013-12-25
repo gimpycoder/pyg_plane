@@ -24,7 +24,7 @@ class Particle(object):
         print 'power: %r' % self.power
         print 'max radius: %r' % self.max_radius
         print 'radius: %r' % self.radius
-        raw_input('wait')
+        #raw_input('wait')
     #___________________________________________________________________________    
     def update(self):
         # let's get rid of them first.
@@ -60,7 +60,7 @@ class Explosion(object):
     #___________________________________________________________________________
     def __init__(self, screen, location, max_power, max_radius=100):
         self.screen       = screen
-        self.location     = location.get_copy()
+        self.location     = Vector(location[0],location[1])#location.get_copy()
         self.max_power    = max_power
         self.max_radius   = max_radius
         self.circles = []

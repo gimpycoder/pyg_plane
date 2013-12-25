@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 from hud import Score, HealthBar
 from mobile import Player, Boat, Plane, PowerUp
+from particles import Explosion
 from utility import *
 
 #===============================================================================
@@ -47,7 +48,8 @@ class WarZone(object):
         self.lives  = lives
         self.alive  = False
 
-
+        self.bomb_image = get_image('bomb', 0)
+        self.bombs = 3
 
         self.background1 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 0)
         self.background2 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 1)
@@ -101,6 +103,7 @@ class WarZone(object):
                        
         #boat = Boat(self.screen, player)
         planes = []
+        explosions = []
     
         fighting = True
         background = self.background1
@@ -111,7 +114,7 @@ class WarZone(object):
         bg_counter = 32
         bg_frame = 0
         bg_wait = 30
-        bg_speed = 3
+        bg_speed = 1
         
         lives_size = self.lives_image.get_size()[0]
         
@@ -135,7 +138,18 @@ class WarZone(object):
                         player.power = 0
                    elif e.key == K_SPACE:
                     player.fire()
-                    
+                   elif e.key == K_b:
+                    print 'bomb dropped'
+                    self.bombs -= 1
+                    for p in planes:
+                        explosion = self.create_explosion(self.screen, (p.location.x, p.location.y))
+                        explosions.append(explosion)
+                        planes.remove(p)
+                
+                #if e.type == MOUSEBUTTONDOWN:
+                #    location = pygame.mouse.get_pos()
+                #    explosion = self.create_explosion(self.screen, location)
+                #    explosions.append(explosion)
 
 
             # get the input key
@@ -162,7 +176,7 @@ class WarZone(object):
             if wait <= 0:
                 chance = random.random()
                 print 'chance = %.2f' % chance
-                if chance < .5:
+                if chance < 1.0:
                     print 'plane built'
                     x = random.randint(20, 600)
                     planes.append(Plane(self.screen, Vector(x, 0), player))
@@ -198,14 +212,36 @@ class WarZone(object):
             for i in xrange(self.lives):
                 self.screen.blit(self.lives_image, (live_x + 7,live_y + 20))
                 live_x += lives_size
+            
+            for i in xrange(1, self.bombs + 1):
+                self.screen.blit(self.bomb_image, (self.screen_size[X] - 32 * i, self.screen_size[Y] - 32))
+                
                 
             for p in planes:
                 p.update()
+                
                 if p.is_offscreen:
                     planes.remove(p)
                     print 'plane removed'
                     continue
+                
+                rect = p.get_rect()
+                for b in player.bullets:
+                    
+                    if rect.collidepoint(b.location.x, b.location.y):
+                        explosion = self.create_explosion(self.screen, (p.location.x, p.location.y))
+                        explosions.append(explosion)
+                        player.bullets.remove(b)
+                        planes.remove(p)
+                        
                 p.display()
+                
+            for e in explosions:
+                if e.is_alive == False:
+                    explosions.remove(e)
+                    continue
+                e.update()
+                e.display()
             
             self.score.display()
             self.health_bar.display()
@@ -214,12 +250,13 @@ class WarZone(object):
             pygame.display.flip()
             wait -= 1
     
+            # this controls the animation of the ocean background and the scroll
             bg_speed -= 1
-            if bg_speed < 0:
-                bg_counter -= 1
-                bg_speed = 3
+            if bg_speed < 0:            # TODO: change these magic values to
+                bg_counter -= 1         # variables.
+                bg_speed = 1
                 if bg_counter < 0:
-                    bg_counter = 32
+                    bg_counter = 32 # 32 is the size of an ocean tile.
     
         # looping while alive
         # then..
@@ -231,6 +268,17 @@ class WarZone(object):
         self.dead()
     
     #___________________________________________________________________________
+    def create_explosion(self, screen, location):
+        
+        explosion = Explosion(screen,
+                              location,
+                              max_power = 4,        # 1
+                              max_radius = 10)      # 15
+        explosion.build(200)
+        return explosion
+    
+    
+    #___________________________________________________________________________
     # Displayed between lives with a "GET READY" flashing message if there are
     # lives left. Otherwise flashes game over.
     def dead(self):
@@ -239,15 +287,15 @@ class WarZone(object):
         wait = FPS
         reset = wait
         
-        waitground = Ground.get_background(self.screen.get_size(), 0, 0)
+        waitground = get_background(self.screen.get_size(), 0, 0)
         print 'lives: %d' % self.lives
         if self.lives > 0:
-            message1  = artwork.get_image('get_ready', 0)
-            message2  = artwork.get_image('get_ready', 1)
+            message1  = get_image('get_ready', 0)
+            message2  = get_image('get_ready', 1)
         else:
             print 'game over'
-            message1  = artwork.get_image('game_over', 0)
-            message2  = artwork.get_image('game_over', 1)
+            message1  = get_image('game_over', 0)
+            message2  = get_image('game_over', 1)
         
         # this alternates to cause blinking.
         message = message1

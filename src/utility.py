@@ -176,6 +176,9 @@ image_paths  = {
     'power_up'          : ['../res/power_up_01.png',
                            '../res/power_up_02.png'
                           ],
+                          
+    'bomb'              : ['../res/bomb.png'],
+
     'water'             : ['../res/water_01.png',
                            '../res/water_02.png'
                           ],
@@ -215,6 +218,9 @@ def init():
     assets['wave']      = [pyg.image.load(image_paths['wave'][0])]
     assets['power_up']  = [pyg.image.load(image_paths['power_up'][0]),
                            pyg.image.load(image_paths['power_up'][1])]
+                           
+    assets['bomb']      = [pyg.image.load(image_paths['bomb'][0])]
+                           
     assets['water']     = [pyg.image.load(image_paths['water'][0]),
                            pyg.image.load(image_paths['water'][1])]
     
@@ -410,7 +416,7 @@ def get_background(zone_size, level, frame=0):
     return zone
 #_______________________________________________________________________________    
 def get_waitground(zone):
-    raw_input('waitground')
+    #raw_input('waitground')
     size_x, size_y = zone.get_size()
     zone.fill((189,189,189))
     radius = 10
