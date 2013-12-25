@@ -97,13 +97,16 @@ class Vehicle(object):
             for frame in self.frames:
                 self.image = frame
                 yield None
-                yield None
+                #yield None
     
     #___________________________________________________________________________
     def update(self):
         #self.frame_delay -= 1
         #if self.frame_delay <= 0:
-        self.animation.next()
+        try:
+            self.animation.next()
+        except StopIteration:
+            print 'no more animation'
         #    self.frame_delay = FRAME_DELAY
     
     #___________________________________________________________________________    
@@ -564,7 +567,8 @@ class PowerUp(Vehicle):
         location = Vector of initial position
         
         """
-        super(PowerUp, self).__init__(self.name, location)
+        self.location = Vector(location[X],location[Y])
+        super(PowerUp, self).__init__(self.name, self.location)
         self.screen             = screen
         self.speed              = 5
         self.frame_count        = get_frame_count(self.name)

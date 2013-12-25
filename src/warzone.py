@@ -2,14 +2,14 @@ import random
 import pygame
 from pygame.locals import *
 from hud import Score, HealthBar
-from mobile import Player, Boat, Plane
+from mobile import Player, Boat, Plane, PowerUp
 from utility import *
 
 #===============================================================================
 FPS = 30
 SCORE_BOARD_WIDTH = 120
 
-# pretty tuples
+# pretty indexes
 X = 0
 Y = 1
 
@@ -49,8 +49,8 @@ class WarZone(object):
 
 
 
-        self.background1 = get_background(self.screen_size, level, 0)
-        self.background2 = get_background(self.screen_size, level, 1)
+        self.background1 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 0)
+        self.background2 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 1)
 
 
         self.clock = pygame.time.Clock()
@@ -78,11 +78,6 @@ class WarZone(object):
             self.screen.blit(menu, menu_center)
             self.screen.blit(self.lives_image, pointer)
             pygame.display.flip()
-            
-            for event in pygame.event.get():
-                if event.type == MOUSEMOTION:
-                    mouse_x, mouse_y = pygame.mouse.get_pos()
-                    print '%d,%d' % (mouse_x, mouse_y)
             
     
     #___________________________________________________________________________
@@ -113,9 +108,15 @@ class WarZone(object):
         wait  = 1 * FPS
         reset = wait
         
-        bg = 0
+        bg_counter = 32
+        bg_frame = 0
+        bg_wait = 30
+        bg_speed = 3
         
         lives_size = self.lives_image.get_size()[0]
+        
+        powerup = PowerUp(self.screen, 
+                       (self.start_location[X], self.start_location[Y]- 40))
         
         while fighting:
             #raw_input('waiting') for debugging
@@ -152,6 +153,7 @@ class WarZone(object):
 
 
             player.update(move)
+            powerup.update()
             #boat.update()
 
             #-------------------------------------------------------------------
@@ -181,10 +183,11 @@ class WarZone(object):
             #-------------------------------------------------------------------
             
             
-            
-            self.screen.blit(background, (0,0))
+            self.screen.blit(background, (0,0), (0, bg_counter, 640, 480))
+            #self.screen.blit(background, (0,0))
             
             player.display()
+            powerup.display()
             #boat.display()
             
             live_x = 0
@@ -207,9 +210,16 @@ class WarZone(object):
             self.score.display()
             self.health_bar.display()
             #self.boat_health_bar.display()
-            
+
             pygame.display.flip()
             wait -= 1
+    
+            bg_speed -= 1
+            if bg_speed < 0:
+                bg_counter -= 1
+                bg_speed = 3
+                if bg_counter < 0:
+                    bg_counter = 32
     
         # looping while alive
         # then..

@@ -392,7 +392,7 @@ def get_background(zone_size, level, frame=0):
     frame = which frame in the collection is desired.
     """
     zone = pyg.Surface(zone_size).convert()
-    
+    image = pyg.Surface((32,32))
     if level == 0:
         image = get_waitground(zone)
         
