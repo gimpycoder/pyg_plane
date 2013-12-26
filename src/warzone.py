@@ -2,7 +2,7 @@ import random
 import pygame
 from pygame.locals import *
 from hud import Score, HealthBar
-from mobile import Player, Boat, Plane, PowerUp
+from mobile import Player, Boat, Plane, PowerUp, BigPlane
 from particles import Explosion
 from utility import *
 
@@ -102,6 +102,7 @@ class WarZone(object):
                        (self.start_location[X], self.start_location[Y]))
                        
         #boat = Boat(self.screen, player)
+        big_papa = BigPlane(self.screen, (self.start_location[X] + 30, self.start_location[Y]))
         planes = []
         explosions = []
     
@@ -168,6 +169,7 @@ class WarZone(object):
 
             player.update(move)
             powerup.update()
+            big_papa.update()
             #boat.update()
 
             #-------------------------------------------------------------------
@@ -202,6 +204,7 @@ class WarZone(object):
             
             player.display()
             powerup.display()
+            big_papa.display()
             #boat.display()
             
             live_x = 0

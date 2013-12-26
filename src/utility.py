@@ -168,6 +168,8 @@ image_paths  = {
                            '../res/planes/orange_10.png',  # west
                            '../res/planes/orange_11.png'], # south-west
                                                            # NO FLIP!
+                                                           
+    'big-plane'         : ['../res/BigPlane.png'],
                           
     'health'            : ['../res/health_bar.png'],
     'numbers'           : ['../res/numbers.png'],
@@ -318,6 +320,8 @@ def init():
                              pyg.image.load(image_paths['orange-plane'][8]),
                              pyg.image.load(image_paths['orange-plane'][9]),
                              pyg.image.load(image_paths['orange-plane'][10])]
+                             
+    assets['big-plane']   = [pyg.image.load(image_paths['big-plane'][0])]
     
     # Title screen graphics.
     assets['title']     = [pyg.image.load(image_paths['title'][0]),

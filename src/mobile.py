@@ -6,6 +6,9 @@ from particles import Explosion # I want to get this out of here...
 X = 0
 Y = 1
 
+
+
+
 ################################################################################
 # ALL ENTITIES THAT MOVE
 # Classes in File:
@@ -57,12 +60,6 @@ class Bullet(object):
     def display(self):
         if self.alive:
             self.screen.blit(self.image, (self.location.x, self.location.y))
-        
-            #pyg.draw.circle(self.screen, 
-            #                self.color, 
-            #                (int(self.location.x), int(self.location.y)), 
-            #                self.radius, 
-            #                0) # 0 fills in the circle
                             
 #===============================================================================
 # This is pretty much the container for artwork tied to the mobiles in the game
@@ -87,7 +84,8 @@ class Vehicle(object):
         
         self.animation = self.flip()
         self.frames = assets[self.name]
-        self.image = pyg.Surface((32,32))
+        #self.image = pyg.Surface((64,64))
+        self.image = get_image(self.name, 0)
     
     #___________________________________________________________________________
     # learned this from 
@@ -173,7 +171,7 @@ class Player(Vehicle):
         # I'm storing it this way so I can do the operations on it as a whole.
         # I'm thinking of not doing it this way.
         # TODO: Ponder not using this...
-        self.location = Vector(location[0],location[1])
+        self.location = Vector(location[X],location[Y])
         self.img_x, self.img_y = get_image(self.name, 0).get_size()
         self.bullets = []
         self.bullet_speed = 5
@@ -411,9 +409,34 @@ class Boat(Vehicle):
             b.display()
 
 #===============================================================================
+"""
+ (-1,-1),(0,-1),(1,-1)
+
+        NW N NE
+          \|/
+(-1,0)  W--*--E  (1,0)
+          /|\
+        SW S SE
+        
+  (-1,1),(0,1),(1,1)
+"""
+
+NORTH = 7
+EAST  = 5
+SOUTH = 3
+WEST  = 9
+NE    = 6
+NW    = 8
+SE    = 4
+SW    = 10
+
+FLYING = 0
+FLIPPING = 1
+FLIPPED = 2
+
 class Plane(Vehicle):
     names = ['olive-plane','white-plane','green-plane',
-             'blue-plane','orange-plane'
+             'blue-plane'#,'orange-plane' (he doesn't flip)
     ]
     name = 'olive-plane'
     FIRE_RATE = 10
@@ -438,20 +461,38 @@ class Plane(Vehicle):
         self.img_x, self.img_y = get_image(self.name, 0).get_size()
         self.max_x, self.max_y  = screen.get_size()
         self.location = Vector(location.x, location.y - self.img_y)
-    
+        
+        self.directions = {
+            (0, 0)  : self.image,
+            (-1,-1) : get_image(self.name, NW),
+            (0,-1)  : get_image(self.name, NORTH),
+            (1,-1)  : get_image(self.name, NE),
+            (-1,0)  : get_image(self.name, WEST),
+            (1,0)   : get_image(self.name, EAST),
+            (-1,1)  : get_image(self.name, SW),
+            (0,1)   : get_image(self.name, SOUTH),
+            (1,1)   : get_image(self.name, SE)
+        }
+        
+        self.flips = [get_image(self.name, 11),
+                      get_image(self.name, 12),
+                      get_image(self.name, 13),
+                      get_image(self.name, 14),
+                      get_image(self.name, 15)]
+        
+        self.upside_down = [get_image(self.name, 16),
+                            get_image(self.name, 17)]
+        
+        self.state = FLYING
+        self.flip_frame = 0
+        self.upside_down_frame = 0
+        
         # bottom of the graphic:
         self.gun_location = Vector(self.img_x/2, self.img_y)
     
         self.explosion = None
         
-        self.idle_anim = [self.frames[0], self.frames[1], self.frames[2]]
-        if not self.name == 'orange-plane':
-            self.flip_anim = [self.frames[11], self.frames[12], self.frames[13],
-                              self.frames[14], self.frames[15]]
-            self.flipped_anim = [self.frames[16], self.frames[17]]
-        self.frames = self.idle_anim
-        
-        super(Plane, self).update()
+        #super(Plane, self).update()
     
     #___________________________________________________________________________
     def get_rect(self):
@@ -480,24 +521,36 @@ class Plane(Vehicle):
     
     #___________________________________________________________________________    
     def update(self):
-        super(Plane, self).update()
-        self.fire_rate -= 1
-        # change position by speed:
-        self.location.add(Vector(0, self.speed))
+        #super(Plane, self).update()
         
-        if self.boundaries.collidepoint((self.location.x, self.location.y)):
-            self.is_alive = True
-        
-        if not self.boundaries.collidepoint((self.location.x, self.location.y)) and \
-           self.is_alive == True:
-        #if self.location.y > self.max_y + self.img_y:
-            self.is_alive = False
-            self.is_offscreen = True
-        
-        if not self.name == 'orange-plane':
+        if self.state is FLIPPING:
+            if self.flip_frame == len(self.flips) - 1:
+                self.state = FLIPPED
+                print '%s is retreating' % self.name
+            else:
+                self.image = self.flips[self.flip_frame]
+                self.flip_frame += 1
+                print '%s is flipping' % self.name
+        elif self.state is FLIPPED:
+            self.upside_down_frame = 1 - self.upside_down_frame
+            self.image = self.upside_down[self.upside_down_frame]
+            self.location.y -= self.speed
+        else:
+            self.fire_rate -= 1
+            # change position by speed:
+            self.location.add(Vector(0, self.speed))
+            
+            if self.boundaries.collidepoint((self.location.x, self.location.y)):
+                self.is_alive = True
+            
+            if not self.boundaries.collidepoint((self.location.x, self.location.y)) and \
+               self.is_alive == True:
+            #if self.location.y > self.max_y + self.img_y:
+                self.is_alive = False
+                self.is_offscreen = True
+            
             if self.location.y > self.max_y/2:
-                self.frames = self.flip_anim
-                self.speed = -self.speed
+                self.state = FLIPPING
         
         #print self.location
         # our plane handles its own bullets now.
@@ -587,3 +640,27 @@ class PowerUp(Vehicle):
     #___________________________________________________________________________
     def display(self):
         super(PowerUp, self).display()
+        
+#===============================================================================
+class BigPlane(Vehicle):
+    name = 'big-plane'
+
+    def __init__(self, screen, location):
+        self.location = Vector(location[X], location[Y])
+        super(BigPlane, self).__init__(self.name, self.location)
+        self.screen = screen
+        self.speed = 1
+        self.image = get_image(self.name, 0)
+        
+        self.stop_y = self.screen.get_height() / 4 - 20
+        
+    def update(self):
+        if self.location.y <= self.stop_y:
+            self.location.x -= self.speed
+        else:
+            self.location.y -= self.speed
+    
+    def display(self):
+        #super(BigPlane, self).display()
+        self.screen.blit(self.image, (self.location.x, self.location.y))
+    
