@@ -39,4 +39,6 @@ http://www.dreamincode.net/forums/blog/2274/entry-4623-pygame-air-show-i/
 
 http://www.dreamincode.net/forums/blog/2274/entry-4625-pygame-air-show-ii/
 
+http://www.dreamincode.net/forums/blog/2274/entry-4645-pygame-eight-direction-rotation/
+
 more to come...
