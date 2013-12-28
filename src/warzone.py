@@ -101,7 +101,7 @@ class WarZone(object):
         player = Player(self.screen, 
                        (self.start_location[X], self.start_location[Y]))
                        
-        #boat = Boat(self.screen, player)
+        boat = Boat(self.screen, player)
         big_papa = BigPlane(self.screen, (self.start_location[X] + 30, self.start_location[Y]))
         planes = []
         explosions = []
@@ -170,7 +170,7 @@ class WarZone(object):
             player.update(move)
             powerup.update()
             big_papa.update()
-            #boat.update()
+            boat.update()
 
             #-------------------------------------------------------------------
             # Change background might be a little overkill because I think it
@@ -205,7 +205,7 @@ class WarZone(object):
             player.display()
             powerup.display()
             big_papa.display()
-            #boat.display()
+            boat.display()
             
             live_x = 0
             live_y = 0
@@ -248,7 +248,7 @@ class WarZone(object):
             
             self.score.display()
             self.health_bar.display()
-            #self.boat_health_bar.display()
+            self.boat_health_bar.display()
 
             pygame.display.flip()
             wait -= 1

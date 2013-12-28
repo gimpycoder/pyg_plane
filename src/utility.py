@@ -46,6 +46,16 @@ class Vector(object):
     def norm(self):
         magnitude = self.mag()
         self.div(magnitude)
+        
+    #___________________________________________________________________________
+    # Return 2-tuple (degrees, radians).
+    def get_angle(self, target):
+        dx = target.x - self.x
+        dy = target.y - self.y
+        r = math.atan2(-dy, dx)
+        r %= 2 * math.pi
+        deg = math.degrees(r)
+        return (deg, r)
     #___________________________________________________________________________    
     def get_copy(self):
         return copy.copy(self)
@@ -78,6 +88,15 @@ image_paths  = {
     'boat'              : ['../res/boat_a_01.png',
                            '../res/boat_a_02.png'
                           ],
+                          
+    'turret'            : ['../res/turret/turret_south.png',
+                           '../res/turret/turret_south_east.png',
+                           '../res/turret/turret_east.png',
+                           '../res/turret/turret_north_east.png',
+                           '../res/turret/turret_north.png',
+                           '../res/turret/turret_north_west.png',
+                           '../res/turret/turret_west.png',
+                           '../res/turret/turret_south_west.png'],
     
     'olive-plane'       : ['../res/planes/olive_01.png',
                            '../res/planes/olive_02.png',
@@ -214,6 +233,16 @@ def init():
                            
     assets['boat']      = [pyg.image.load(image_paths['boat'][0]),
                            pyg.image.load(image_paths['boat'][1])]
+                           
+    assets['turret']    = [pyg.image.load(image_paths['turret'][0]), # south
+                           pyg.image.load(image_paths['turret'][1]), # south-east
+                           pyg.image.load(image_paths['turret'][2]), # east
+                           pyg.image.load(image_paths['turret'][3]), # north-east
+                           pyg.image.load(image_paths['turret'][4]), # north
+                           pyg.image.load(image_paths['turret'][5]), # north-west
+                           pyg.image.load(image_paths['turret'][6]), # west
+                           pyg.image.load(image_paths['turret'][7])] # south-west
+                         
     assets['health']    = [pyg.image.load(image_paths['health'][0])]
     assets['numbers']   = [pyg.image.load(image_paths['numbers'][0])]
     assets['score']     = [pyg.image.load(image_paths['score'][0])]

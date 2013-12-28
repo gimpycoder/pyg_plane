@@ -288,7 +288,8 @@ class Player(Vehicle):
             b.display()
             
 #===============================================================================
-class Boat(Vehicle):
+class Boat(Vehicle):   # 20,50 gun turret
+                       # 20, 145 gun turret (180 boat)
     name = 'boat'
     FIRE_RATE = 30
     
@@ -300,7 +301,7 @@ class Boat(Vehicle):
         self.speed          = speed
         self.bullet_speed   = bullet_speed
         self.gun_location   = Vector(20, 109)
-        self.target         = player
+        self.target         = player.location
         self.damage         = 10
         self.health         = 5
         self.is_alive       = True
@@ -311,6 +312,22 @@ class Boat(Vehicle):
         self.max_x, self.max_y  = screen.get_size()
         self.location = Vector(self.max_x/2 - self.img_x/2, 
                                self.max_y/2 - self.img_y/2)
+        
+        # Turret directions
+        self.directions = {
+            'south'         : get_image('turret', 0),
+            'south-east'    : get_image('turret', 1),
+            'east'          : get_image('turret', 2),
+            'north-east'    : get_image('turret', 3),
+            'north'         : get_image('turret', 4),
+            'north-west'    : get_image('turret', 5),
+            'west'          : get_image('turret', 6),
+            'south-west'    : get_image('turret', 7)
+        }
+        
+        
+        self.turret = get_image('turret', 0)
+        self.turret_location = Vector(self.location.x + 11, self.location.y + 35)
                                
         self.explosion = None
     #___________________________________________________________________________    
@@ -350,6 +367,30 @@ class Boat(Vehicle):
     def update(self):
         super(Boat, self).update()
         self.fire_rate -= 1
+                
+        deg, rad = self.turret_location.get_angle(self.target)
+        print 'player:x=%d,y=%d' % (self.target.x, self.target.y)
+        print 'deg=%.2f,rad=%.2f' % (deg,rad)
+        
+        if 337.5 <= deg or deg < 22.5:
+            self.turret = self.directions['east']
+        elif 22.5 <= deg < 67.5:
+            self.turret = self.directions['north-east']
+        elif 67.5 <= deg < 112.5:
+            self.turret = self.directions['north']
+        elif 112.5 <= deg < 157.5:
+            self.turret = self.directions['north-west']
+        elif 157.5 <= deg < 202.5:
+            self.turret = self.directions['west']
+        elif 202.5 <= deg < 247.5:
+            self.turret = self.directions['south-west']
+        elif 247.5 <= deg < 292.5:
+            self.turret = self.directions['south']
+        elif 292.5 <= deg < 337.5:
+            self.turret = self.directions['south-east']
+        else:
+            print 'ERROR: %r' % deg
+         
     
         # our boat handles its own bullets now.
         # first fire, then update.
@@ -366,14 +407,14 @@ class Boat(Vehicle):
             return
             
         gun = self.get_center()
-        if gun.y > self.target.location.y:
+        if gun.y > self.target.y:
             return
     
         # get a random float:
         #chance = random.random()
         # we only fire 8% of the time
         #if chance <= .08:
-        if abs(self.target.location.x - self.location.x) <= 50:
+        if abs(self.target.x - self.location.x) <= 50:
             # get a random float:
             chance = random.random()
             if chance > .20:
@@ -385,6 +426,7 @@ class Boat(Vehicle):
             bullet = Bullet(self.screen, # we'll get rid of screen on this soon
                             gun, 
                             1,                 # little pea shooter radius
+                            0,
                             self.bullet_speed, # speed is negative so it adds.
                             (255,255,255))
             # add bullet to collection
@@ -403,6 +445,7 @@ class Boat(Vehicle):
         else:
             super(Boat, self).display()
         
+        self.screen.blit(self.turret, (self.turret_location.x, self.turret_location.y))
                          
         # now draw all bullets and they will be on top of the boat.
         for b in self.bullets:
