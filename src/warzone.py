@@ -54,8 +54,8 @@ class WarZone(object):
         self.background1 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 0)
         self.background2 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 1)
 
-
         self.clock = pygame.time.Clock()
+
 
     #___________________________________________________________________________
     # Currently not operational and quite messy.
@@ -166,7 +166,7 @@ class WarZone(object):
             if key[K_DOWN]:
                 move.y += 1
 
-
+            #self.health_bar.decrease_health(1)
             player.update(move)
             powerup.update()
             big_papa.update()
@@ -202,10 +202,11 @@ class WarZone(object):
             self.screen.blit(background, (0,0), (0, bg_counter, 640, 480))
             #self.screen.blit(background, (0,0))
             
+            # note to self... always display boat first.
+            boat.display()
             player.display()
             powerup.display()
             big_papa.display()
-            boat.display()
             
             live_x = 0
             live_y = 0
@@ -275,9 +276,9 @@ class WarZone(object):
         
         explosion = Explosion(screen,
                               location,
-                              max_power = 4,        # 1
-                              max_radius = 10)      # 15
-        explosion.build(200)
+                              max_power = 4,        #4 current # 1
+                              max_radius = 15)      #10 current # 15
+        explosion.build(100)
         return explosion
     
     

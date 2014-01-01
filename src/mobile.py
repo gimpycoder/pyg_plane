@@ -177,15 +177,15 @@ class Player(Vehicle):
         self.bullet_speed = 5
         self.power = power
         
-        self.left_buddy = get_image('buddy',0)
-        self.left_buddy_location = self.location.get_copy()
-        self.left_buddy_location.x -= 32
-        self.left_buddy_location.y += 14
+        #self.left_buddy = get_image('buddy',0)
+        #self.left_buddy_location = self.location.get_copy()
+        #self.left_buddy_location.x -= 32
+        #self.left_buddy_location.y += 14
         
-        self.right_buddy = get_image('buddy',0)
-        self.right_buddy_location = self.location.get_copy()
-        self.right_buddy_location.x += 67
-        self.right_buddy_location.y += 14
+        #self.right_buddy = get_image('buddy',0)
+        #self.right_buddy_location = self.location.get_copy()
+        #self.right_buddy_location.x += 67
+        #self.right_buddy_location.y += 14
     
     #___________________________________________________________________________
     # Here is where bullets are added to the collection. The bullets start at
@@ -194,10 +194,10 @@ class Player(Vehicle):
         gun = self.get_center()
         gun.y = self.location.y
         
-        left_b_gun = gun.get_copy()
-        left_b_gun.x -= 32 + 32/2
-        right_b_gun = gun.get_copy()
-        right_b_gun.x += 32 + 32/2 + 2
+        #left_b_gun = gun.get_copy()
+        #left_b_gun.x -= 32 + 32/2
+        #right_b_gun = gun.get_copy()
+        #right_b_gun.x += 32 + 32/2 + 2
         
         # create the bullet
         bullet = Bullet(self.screen, # we'll get rid of screen on this soon
@@ -209,23 +209,23 @@ class Player(Vehicle):
                             
         self.bullets.append(bullet)
                             
-        bullet = Bullet(self.screen, # we'll get rid of screen on this soon
-                            left_b_gun, 
-                            1,                 # little pea shooter radius
-                            self.power,
-                            self.bullet_speed, # speed is positive.
-                            (255,255,255))
+        #bullet = Bullet(self.screen, # we'll get rid of screen on this soon
+        #                    left_b_gun, 
+        #                    1,                 # little pea shooter radius
+        #                    self.power,
+        #                    self.bullet_speed, # speed is positive.
+         #                   (255,255,255))
                             
-        self.bullets.append(bullet)
+        #self.bullets.append(bullet)
         
-        bullet = Bullet(self.screen, # we'll get rid of screen on this soon
-                            right_b_gun, 
-                            1,                 # little pea shooter radius
-                            self.power,
-                            self.bullet_speed, # speed is positive.
-                            (255,255,255))
+        #bullet = Bullet(self.screen, # we'll get rid of screen on this soon
+        #                    right_b_gun, 
+        #                    1,                 # little pea shooter radius
+        #                    self.power,
+        #                    self.bullet_speed, # speed is positive.
+        #                    (255,255,255))
                             
-        self.bullets.append(bullet)
+        #self.bullets.append(bullet)
     
     #___________________________________________________________________________
     # Since the player has a collection of their own bullets (which I think is
@@ -271,8 +271,8 @@ class Player(Vehicle):
         super(Player, self).update()
         movement.mul(self.speed)
         self.location.add(movement)
-        self.left_buddy_location.add(movement)
-        self.right_buddy_location.add(movement)
+        #self.left_buddy_location.add(movement)
+        #self.right_buddy_location.add(movement)
         # update all bullets:
         for b in self.bullets:
             b.update()
@@ -282,8 +282,8 @@ class Player(Vehicle):
     #___________________________________________________________________________    
     def display(self):
         super(Player, self).display()
-        self.screen.blit(self.left_buddy, (self.left_buddy_location.x, self.left_buddy_location.y))
-        self.screen.blit(self.right_buddy, (self.right_buddy_location.x, self.right_buddy_location.y))
+        #self.screen.blit(self.left_buddy, (self.left_buddy_location.x, self.left_buddy_location.y))
+        #self.screen.blit(self.right_buddy, (self.right_buddy_location.x, self.right_buddy_location.y))
         for b in self.bullets:
             b.display()
             
@@ -369,8 +369,6 @@ class Boat(Vehicle):   # 20,50 gun turret
         self.fire_rate -= 1
                 
         deg, rad = self.turret_location.get_angle(self.target)
-        print 'player:x=%d,y=%d' % (self.target.x, self.target.y)
-        print 'deg=%.2f,rad=%.2f' % (deg,rad)
         
         if 337.5 <= deg or deg < 22.5:
             self.turret = self.directions['east']

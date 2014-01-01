@@ -89,6 +89,13 @@ image_paths  = {
                            '../res/boat_a_02.png'
                           ],
                           
+    'submarine'         : ['../res/submarine/sub_01.png',   # exposed
+                           '../res/submarine/sub_02.png',   # submerge 1
+                           '../res/submarine/sub_03.png',   # submerge 2
+                           '../res/submarine/sub_04.png',   # submerge 3
+                           '../res/submarine/sub_05.png',   # submerge 4
+                           '../res/submarine/sub_06.png'],  # submerge 5
+                          
     'turret'            : ['../res/turret/turret_south.png',
                            '../res/turret/turret_south_east.png',
                            '../res/turret/turret_east.png',
@@ -189,6 +196,14 @@ image_paths  = {
                                                            # NO FLIP!
                                                            
     'big-plane'         : ['../res/BigPlane.png'],
+    
+    'bomber'            : ['../res/bomber/bomber_00.png',  # size test
+                           '../res/bomber/bomber_01.png',  # standard 01
+                           '../res/bomber/bomber_02.png',  # standard 02
+                           '../res/bomber/bomber_03.png',  # standard 03
+                           '../res/bomber/bomber_04.png',  # crashing 01
+                           '../res/bomber/bomber_05.png',  # crashing 02
+                           '../res/bomber/bomber_06.png'], # crashing 03
                           
     'health'            : ['../res/health_bar.png'],
     'numbers'           : ['../res/numbers.png'],
@@ -234,6 +249,13 @@ def init():
     assets['boat']      = [pyg.image.load(image_paths['boat'][0]),
                            pyg.image.load(image_paths['boat'][1])]
                            
+    assets['submarine'] = [pyg.image.load(image_paths['submarine'][0]),
+                           pyg.image.load(image_paths['submarine'][1]),
+                           pyg.image.load(image_paths['submarine'][2]),
+                           pyg.image.load(image_paths['submarine'][3]),
+                           pyg.image.load(image_paths['submarine'][4]),
+                           pyg.image.load(image_paths['submarine'][5])]
+                          
     assets['turret']    = [pyg.image.load(image_paths['turret'][0]), # south
                            pyg.image.load(image_paths['turret'][1]), # south-east
                            pyg.image.load(image_paths['turret'][2]), # east
@@ -351,6 +373,14 @@ def init():
                              pyg.image.load(image_paths['orange-plane'][10])]
                              
     assets['big-plane']   = [pyg.image.load(image_paths['big-plane'][0])]
+    
+    assets['bomber']      = [pyg.image.load(image_paths['bomber'][0]),
+                             pyg.image.load(image_paths['bomber'][1]),
+                             pyg.image.load(image_paths['bomber'][2]),
+                             pyg.image.load(image_paths['bomber'][3]),
+                             pyg.image.load(image_paths['bomber'][4]),
+                             pyg.image.load(image_paths['bomber'][5]),
+                             pyg.image.load(image_paths['bomber'][6])]
     
     # Title screen graphics.
     assets['title']     = [pyg.image.load(image_paths['title'][0]),
