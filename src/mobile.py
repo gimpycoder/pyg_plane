@@ -6,14 +6,10 @@ from particles import Explosion # I want to get this out of here...
 X = 0
 Y = 1
 
-
-
-
 ################################################################################
 # ALL ENTITIES THAT MOVE
 # Classes in File:
 # Bullet (Does not inherit from Vehicle)
-# Vehicle (Superclass - Should be replaced by pygame's Sprite in future)
 # Player
 # Boat
 # Plane
@@ -23,20 +19,18 @@ Y = 1
 class Bullet(object):
     # power 0 = little pea shooter (standard bullet)
     #___________________________________________________________________________
-    def __init__(self, screen, location, radius, power=0, speed=5, color=(255,255,255)):
+    def __init__(self, screen, location, radius, power=0, speed=(0,5)):
         self.screen = screen
         self.location = location
         self.radius = radius
         self.power  = power
-        self.speed = speed
-        self.color = color
+        self.speed = Vector(speed[X], speed[Y])
         self.image = get_image('bullet', power)
         self.alive = True
     
     #___________________________________________________________________________   
     def update(self):
-        # we only change the Y component.
-        self.location.y -= self.speed
+        self.location.add(self.speed)
         self.check_boundaries()
     
     #___________________________________________________________________________
@@ -52,7 +46,6 @@ class Bullet(object):
         if x > right or x < 0 or y > bottom or y < 0:
             self.alive = False
             
-        # update the position with x,y values.
         self.location.x = x
         self.location.y = y
     
@@ -60,56 +53,6 @@ class Bullet(object):
     def display(self):
         if self.alive:
             self.screen.blit(self.image, (self.location.x, self.location.y))
-                            
-#===============================================================================
-# This is pretty much the container for artwork tied to the mobiles in the game
-# When I switch over to subclassing Sprite, this will be useless.
-
-class Vehicle(object):
-
-    #___________________________________________________________________________
-    # TODO: Let __init__ receive 2-tuple instead of existing Vector object.
-    def __init__(self, name, location):
-        """
-        name     = The name of this vehicle based on assets
-        location = Vector of initial position
-        
-        """
-        
-        self.name               = name
-        self.location           = location
-        self.frame_count        = get_frame_count(self.name)
-        self.frame_delay        = 2
-        self.frame              = 0
-        
-        self.animation = self.flip()
-        self.frames = assets[self.name]
-        #self.image = pyg.Surface((64,64))
-        self.image = get_image(self.name, 0)
-    
-    #___________________________________________________________________________
-    # learned this from 
-    # https://qq.readthedocs.org/en/latest/sprites.html#animation
-    def flip(self):
-        while True:
-            for frame in self.frames:
-                self.image = frame
-                yield None
-                #yield None
-    
-    #___________________________________________________________________________
-    def update(self):
-        #self.frame_delay -= 1
-        #if self.frame_delay <= 0:
-        try:
-            self.animation.next()
-        except StopIteration:
-            print 'no more animation'
-        #    self.frame_delay = FRAME_DELAY
-    
-    #___________________________________________________________________________    
-    def display(self):
-        self.screen.blit(self.image, (self.location.x, self.location.y))
         
 #===============================================================================
 # Represents the human player on screen.
@@ -135,19 +78,12 @@ class Vehicle(object):
 # Should not do various things:
 #   - Bound check against screen (This is main world responsibility)
 #   - Check collisions against enemy bullets. (Not Player's job)
-#   - Create explosions - just store desired explosion config here.
-#       World: "How would you like your explosion?"
-#       Player: "Like this..."
-#       Player: "Can I see?"
-#       World: "Nope"
-#       Player: "Can I be notified when it's over?"
-#       World: "You don't exist anymore."
-#           AND that is why PLAYER does no STORE its own SCORE,HEALTH, etc.
+#   - Create explosions - just store desired explosion config here
 #
 # Player exists for ONE LIFE. After that, new instance. Who cares...
 
 # TODO: Implement the explosion again - twas broken and now it's gone.
-class Player(Vehicle):
+class Player(object):
     # used for retrieving the sprite. might get rid of this and just pass in
     # the sprite collection
     name = 'player'
@@ -161,10 +97,7 @@ class Player(Vehicle):
         location = 2-tuple (x,y) of where the player starts.
         speed = rate of change per Update() in game loop.
         """
-        
-        # I want to inherit from pygame Sprite in future.
-        super(Player, self).__init__(self.name, Vector(0,0))
-        
+                
         self.screen = screen
         self.speed = speed
         
@@ -174,8 +107,10 @@ class Player(Vehicle):
         self.location = Vector(location[X],location[Y])
         self.img_x, self.img_y = get_image(self.name, 0).get_size()
         self.bullets = []
-        self.bullet_speed = 5
+        self.bullet_speed = (0, -5)
         self.power = power
+        
+        self.image = get_image(self.name, 0)
         
         #self.left_buddy = get_image('buddy',0)
         #self.left_buddy_location = self.location.get_copy()
@@ -204,8 +139,7 @@ class Player(Vehicle):
                             gun, 
                             1,                 # little pea shooter radius
                             self.power,
-                            self.bullet_speed, # speed is positive.
-                            (255,255,255))
+                            self.bullet_speed) # speed is positive.
                             
         self.bullets.append(bullet)
                             
@@ -213,8 +147,7 @@ class Player(Vehicle):
         #                    left_b_gun, 
         #                    1,                 # little pea shooter radius
         #                    self.power,
-        #                    self.bullet_speed, # speed is positive.
-         #                   (255,255,255))
+        #                    self.bullet_speed) # speed is positive.
                             
         #self.bullets.append(bullet)
         
@@ -222,8 +155,7 @@ class Player(Vehicle):
         #                    right_b_gun, 
         #                    1,                 # little pea shooter radius
         #                    self.power,
-        #                    self.bullet_speed, # speed is positive.
-        #                    (255,255,255))
+        #                    self.bullet_speed) # speed is positive.
                             
         #self.bullets.append(bullet)
     
@@ -268,7 +200,6 @@ class Player(Vehicle):
     # If I inherit from Sprite in the future, this will be called automatically
     # through the RenderUpdate() group's update() method.
     def update(self, movement):
-        super(Player, self).update()
         movement.mul(self.speed)
         self.location.add(movement)
         #self.left_buddy_location.add(movement)
@@ -281,31 +212,40 @@ class Player(Vehicle):
                 
     #___________________________________________________________________________    
     def display(self):
-        super(Player, self).display()
         #self.screen.blit(self.left_buddy, (self.left_buddy_location.x, self.left_buddy_location.y))
         #self.screen.blit(self.right_buddy, (self.right_buddy_location.x, self.right_buddy_location.y))
+        #if self.alive:
+        self.screen.blit(self.image, (self.location.x, self.location.y))
+        
         for b in self.bullets:
             b.display()
             
 #===============================================================================
-class Boat(Vehicle):   # 20,50 gun turret
+class Boat(object):   # 20,50 gun turret
                        # 20, 145 gun turret (180 boat)
     name = 'boat'
     FIRE_RATE = 30
     
     #___________________________________________________________________________
-    def __init__(self, screen, player, speed=5, bullet_speed=-5):
-        super(Boat, self).__init__(self.name, Vector(0,0))
+    def __init__(self, screen, player, speed=5, bullet_speed=5):
         self.screen         = screen
         self.bullets        = []
         self.speed          = speed
-        self.bullet_speed   = bullet_speed
+        self.bullet_speed   = (0, bullet_speed)
         self.gun_location   = Vector(20, 109)
         self.target         = player.location
         self.damage         = 10
         self.health         = 5
         self.is_alive       = True
         self.fire_rate      = self.FIRE_RATE
+        
+        self.images = [get_image(self.name, 0),
+                       get_image(self.name, 1)]
+                       
+        self.image = self.images[0]
+        
+        self.frame = 0
+        self.delay = 5
         
         # for now we duplicate functionality from the original
         self.img_x, self.img_y = get_image(self.name, 0).get_size()
@@ -365,7 +305,12 @@ class Boat(Vehicle):   # 20,50 gun turret
     
     #___________________________________________________________________________    
     def update(self):
-        super(Boat, self).update()
+        self.delay -= 1
+        if self.delay < 0:
+            self.delay = 5
+            self.frame = 1 - self.frame
+            self.image = self.images[self.frame]
+        
         self.fire_rate -= 1
                 
         deg, rad = self.turret_location.get_angle(self.target)
@@ -425,8 +370,8 @@ class Boat(Vehicle):   # 20,50 gun turret
                             gun, 
                             1,                 # little pea shooter radius
                             0,
-                            self.bullet_speed, # speed is negative so it adds.
-                            (255,255,255))
+                            self.bullet_speed) # speed is negative so it adds.
+            
             # add bullet to collection
             self.bullets.append(bullet)
             # now it exists and we wait for update to be called.
@@ -434,14 +379,13 @@ class Boat(Vehicle):   # 20,50 gun turret
             
     #___________________________________________________________________________
     def display(self):
-        #print 'boat exists'
         if not self.is_alive:
             if not self.explosion:
                 self.explode()
             self.explosion.update()
             self.explosion.display()
         else:
-            super(Boat, self).display()
+            self.screen.blit(self.image, (self.location.x, self.location.y))
         
         self.screen.blit(self.turret, (self.turret_location.x, self.turret_location.y))
                          
@@ -475,20 +419,19 @@ FLYING = 0
 FLIPPING = 1
 FLIPPED = 2
 
-class Plane(Vehicle):
+class Plane(object):
     names = ['olive-plane','white-plane','green-plane',
              'blue-plane'#,'orange-plane' (he doesn't flip)
     ]
     name = 'olive-plane'
     FIRE_RATE = 10
     #___________________________________________________________________________
-    def __init__(self, screen, location, player, speed=1, bullet_speed=-5):
+    def __init__(self, screen, location, player, speed=1, bullet_speed=5):
         self.name = random.choice(self.names)
-        super(Plane, self).__init__(self.name, Vector(0,0))
         self.screen         = screen
         self.bullets        = []
         self.speed          = speed
-        self.bullet_speed   = bullet_speed
+        self.bullet_speed   = (0, bullet_speed)
         self.target         = player
         self.damage         = 10
         self.health         = random.randint(1,3)
@@ -498,6 +441,8 @@ class Plane(Vehicle):
         self.is_offscreen   = False
         
         self.boundaries = self.screen.get_rect()
+        
+        self.image = get_image(self.name, 0)
         
         self.img_x, self.img_y = get_image(self.name, 0).get_size()
         self.max_x, self.max_y  = screen.get_size()
@@ -527,13 +472,8 @@ class Plane(Vehicle):
         self.state = FLYING
         self.flip_frame = 0
         self.upside_down_frame = 0
-        
-        # bottom of the graphic:
         self.gun_location = Vector(self.img_x/2, self.img_y)
-    
         self.explosion = None
-        
-        #super(Plane, self).update()
     
     #___________________________________________________________________________
     def get_rect(self):
@@ -562,16 +502,13 @@ class Plane(Vehicle):
     
     #___________________________________________________________________________    
     def update(self):
-        #super(Plane, self).update()
         
         if self.state is FLIPPING:
             if self.flip_frame == len(self.flips) - 1:
                 self.state = FLIPPED
-                print '%s is retreating' % self.name
             else:
                 self.image = self.flips[self.flip_frame]
                 self.flip_frame += 1
-                print '%s is flipping' % self.name
         elif self.state is FLIPPED:
             self.upside_down_frame = 1 - self.upside_down_frame
             self.image = self.upside_down[self.upside_down_frame]
@@ -593,7 +530,6 @@ class Plane(Vehicle):
             if self.location.y > self.max_y/2:
                 self.state = FLIPPING
         
-        #print self.location
         # our plane handles its own bullets now.
         # first fire, then update.
         self.fire()
@@ -602,7 +538,6 @@ class Plane(Vehicle):
             b.update()
             if b.alive == False:
                 self.bullets.remove(b)
-                #print 'plane bullet removed'
     
     #___________________________________________________________________________
     def fire(self):
@@ -627,8 +562,7 @@ class Plane(Vehicle):
                             gun, 
                             1,                 # little pea shooter radius
                             0,
-                            self.bullet_speed, # speed is negative so it adds.
-                            (255,255,255))
+                            self.bullet_speed) # speed is negative so it adds.
             # add bullet to collection
             self.bullets.append(bullet)
             # now it exists and we wait for update to be called.
@@ -643,7 +577,7 @@ class Plane(Vehicle):
                 self.explosion.update()
                 self.explosion.display()
             else:
-                super(Plane, self).display()
+                self.screen.blit(self.image, (self.location.x, self.location.y))
         else:
             self.is_alive = False
         
@@ -652,7 +586,7 @@ class Plane(Vehicle):
             b.display()
             
 #===============================================================================
-class PowerUp(Vehicle):
+class PowerUp(object):
     name = 'power_up'
     #___________________________________________________________________________
     def __init__(self, screen, location):
@@ -662,16 +596,15 @@ class PowerUp(Vehicle):
         
         """
         self.location = Vector(location[X],location[Y])
-        super(PowerUp, self).__init__(self.name, self.location)
         self.screen             = screen
         self.speed              = 5
         self.frame_count        = get_frame_count(self.name)
         self.frame_delay        = FRAME_DELAY
         self.frame              = 0
         self.wait_time          = FRAME_DELAY
+        self.image = get_image(self.name, 0)
     #___________________________________________________________________________
     def update(self):
-        super(PowerUp, self).update()
         # we'll just make it go from left to right straight line for now.
         if self.wait_time == 0:
             self.location.x += self.speed
@@ -680,15 +613,14 @@ class PowerUp(Vehicle):
             self.wait_time -= 1
     #___________________________________________________________________________
     def display(self):
-        super(PowerUp, self).display()
+        self.screen.blit(self.image, (self.location.x, self.location.y))
         
 #===============================================================================
-class BigPlane(Vehicle):
+class BigPlane(object):
     name = 'big-plane'
 
     def __init__(self, screen, location):
         self.location = Vector(location[X], location[Y])
-        super(BigPlane, self).__init__(self.name, self.location)
         self.screen = screen
         self.speed = 1
         self.image = get_image(self.name, 0)
@@ -702,6 +634,5 @@ class BigPlane(Vehicle):
             self.location.y -= self.speed
     
     def display(self):
-        #super(BigPlane, self).display()
         self.screen.blit(self.image, (self.location.x, self.location.y))
     
