@@ -56,13 +56,17 @@ class Vector(object):
         r %= 2 * math.pi
         deg = math.degrees(r)
         return (deg, r)
+    
+    #___________________________________________________________________________    
+    def get_tuple(self):
+        return (self.x, self.y)
     #___________________________________________________________________________    
     def get_copy(self):
         return copy.copy(self)
     #___________________________________________________________________________
     def __str__(self):
         return format("x=%r,y=%r" % (self.x,self.y))
-        
+     
 ################################################################################
 # CODE NOT DIRECTLY REFLECTED AS OBJECTS IN GAME - HELPERS ETC.
 # CONCEPTS in File:
@@ -78,7 +82,7 @@ image_paths  = {
                            '../res/hero_03.png'
                           ],
                           
-    'buddy'             : ['../res/buddy.png'],
+    'wingman'           : ['../res/wingman.png'],
                           
     'bullet'            : ['../res/bullet_01.png',
                            '../res/bullet_02.png',
@@ -239,7 +243,7 @@ def init():
                            pyg.image.load(image_paths['player'][1]),
                            pyg.image.load(image_paths['player'][2])]
                            
-    assets['buddy']     = [pyg.image.load(image_paths['buddy'][0])]
+    assets['wingman']   = [pyg.image.load(image_paths['wingman'][0])]
                            
     assets['bullet']    = [pyg.image.load(image_paths['bullet'][0]),
                            pyg.image.load(image_paths['bullet'][1]),

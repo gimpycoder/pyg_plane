@@ -1,7 +1,7 @@
 import random, math
 import pygame as pyg
 from utility import *
-from particles import Explosion # I want to get this out of here...
+from particles import Bullet,Explosion # I want to get this out of here...
 
 X = 0
 Y = 1
@@ -9,216 +9,9 @@ Y = 1
 ################################################################################
 # ALL ENTITIES THAT MOVE
 # Classes in File:
-# Bullet (Does not inherit from Vehicle)
-# Player
 # Boat
 # Plane
 # PowerUp
-
-#===============================================================================
-class Bullet(object):
-    # power 0 = little pea shooter (standard bullet)
-    #___________________________________________________________________________
-    def __init__(self, screen, location, radius, power=0, speed=(0,5)):
-        self.screen = screen
-        self.location = location
-        self.radius = radius
-        self.power  = power
-        self.speed = Vector(speed[X], speed[Y])
-        self.image = get_image('bullet', power)
-        self.alive = True
-    
-    #___________________________________________________________________________   
-    def update(self):
-        self.location.add(self.speed)
-        self.check_boundaries()
-    
-    #___________________________________________________________________________
-    def check_boundaries(self):
-        # this just makes refering to them shorter.
-        x = self.location.x
-        y = self.location.y
-        # get our x,y boundaries by unpacking get_size()
-        right, bottom = self.screen.get_size()
-        
-        # our boundaries start at 0,0 of the image so we have to
-        # offset where we are checking by the width of the image.
-        if x > right or x < 0 or y > bottom or y < 0:
-            self.alive = False
-            
-        self.location.x = x
-        self.location.y = y
-    
-    #___________________________________________________________________________    
-    def display(self):
-        if self.alive:
-            self.screen.blit(self.image, (self.location.x, self.location.y))
-        
-#===============================================================================
-# Represents the human player on screen.
-# Can be in various states:
-#   - Alive: Health is greater than zero and has not exploded
-#   - Dying: Health is zero and have not exploded yet
-#   - Dead:  Health is zero and have exploded
-#
-# Maintains knowledge of self:
-#   - Location: Cartesian plot with upper left corner 0,0.
-#   - Speed: Amount of translation performed per update in pixels.
-#   - Bullets: Collection of Bullet objects that have been fired.
-#   - Explosion: Particle container for an explosion.
-#   - Max Bullets: Max number of bullets allowed in Bullets collection
-#   - cooldown: rate of fire for player's gun. Each update decrement 1
-#
-# Can do various things:
-#   - Flip the animation image based on the frame (DOESNT BELONG HERE!)
-#   - Create an explosion (Allows granular creation for player vs enemies)
-#   - Fire gun IF cooldown rate accepted AND max bullets not met.
-#   - Create bullets IF can fire gun.
-#
-# Should not do various things:
-#   - Bound check against screen (This is main world responsibility)
-#   - Check collisions against enemy bullets. (Not Player's job)
-#   - Create explosions - just store desired explosion config here
-#
-# Player exists for ONE LIFE. After that, new instance. Who cares...
-
-# TODO: Implement the explosion again - twas broken and now it's gone.
-class Player(object):
-    # used for retrieving the sprite. might get rid of this and just pass in
-    # the sprite collection
-    name = 'player'
-
-    #___________________________________________________________________________
-    # The player does not have a cool-down because firing is tied to KEYDOWN
-    # which means the player has to pump it.
-    def __init__(self, screen, location, speed=5, power=0):
-        """
-        screen = The Surface object to draw on during Display()
-        location = 2-tuple (x,y) of where the player starts.
-        speed = rate of change per Update() in game loop.
-        """
-                
-        self.screen = screen
-        self.speed = speed
-        
-        # I'm storing it this way so I can do the operations on it as a whole.
-        # I'm thinking of not doing it this way.
-        # TODO: Ponder not using this...
-        self.location = Vector(location[X],location[Y])
-        self.img_x, self.img_y = get_image(self.name, 0).get_size()
-        self.bullets = []
-        self.bullet_speed = (0, -5)
-        self.power = power
-        
-        self.image = get_image(self.name, 0)
-        
-        #self.left_buddy = get_image('buddy',0)
-        #self.left_buddy_location = self.location.get_copy()
-        #self.left_buddy_location.x -= 32
-        #self.left_buddy_location.y += 14
-        
-        #self.right_buddy = get_image('buddy',0)
-        #self.right_buddy_location = self.location.get_copy()
-        #self.right_buddy_location.x += 67
-        #self.right_buddy_location.y += 14
-    
-    #___________________________________________________________________________
-    # Here is where bullets are added to the collection. The bullets start at
-    # the center top of the player image.    
-    def fire(self):
-        gun = self.get_center()
-        gun.y = self.location.y
-        
-        #left_b_gun = gun.get_copy()
-        #left_b_gun.x -= 32 + 32/2
-        #right_b_gun = gun.get_copy()
-        #right_b_gun.x += 32 + 32/2 + 2
-        
-        # create the bullet
-        bullet = Bullet(self.screen, # we'll get rid of screen on this soon
-                            gun, 
-                            1,                 # little pea shooter radius
-                            self.power,
-                            self.bullet_speed) # speed is positive.
-                            
-        self.bullets.append(bullet)
-                            
-        #bullet = Bullet(self.screen, # we'll get rid of screen on this soon
-        #                    left_b_gun, 
-        #                    1,                 # little pea shooter radius
-        #                    self.power,
-        #                    self.bullet_speed) # speed is positive.
-                            
-        #self.bullets.append(bullet)
-        
-        #bullet = Bullet(self.screen, # we'll get rid of screen on this soon
-        #                    right_b_gun, 
-        #                    1,                 # little pea shooter radius
-        #                    self.power,
-        #                    self.bullet_speed) # speed is positive.
-                            
-        #self.bullets.append(bullet)
-    
-    #___________________________________________________________________________
-    # Since the player has a collection of their own bullets (which I think is
-    # the wrong choice in retrospect), we pass in a rect to see if collidepoint
-    # is true and if so, remove the bullet.
-    def is_collision(self, rect):
-        """
-        rect = pygame's Rect object but we turn it into a rect anyway so that
-        we can accept the 4-tuple as well.
-        """
-        rect = Rect(rect)
-        for b in self.bullets:
-            if rect.collidepoint((b.location.x, b.location.y)):
-                self.bullets.remove(b)
-                return True
-    
-    #___________________________________________________________________________
-    # If I inherit from Sprite in the future, this will be a useless method.
-    # For now, I need a way to get the rect since player loads its own image.
-    # I plan to move almost all logic out of player and put it in the main
-    # code. 
-    def get_rect(self):
-        return pyg.Rect(self.location.x, self.location.y, self.img_x, self.img_y)
-    
-    #___________________________________________________________________________
-    # This is how we find out where the bullets start at. We have to know the
-    # player's location and then offset it by the player's sprite so it comes
-    # out of the middle...
-    # When implementing new guns, this will have to become more sophisticated
-    # because there might not be full-center aligned guns. For now, it's quite
-    # sufficient.
-    def get_center(self):
-        location = self.location.get_copy()
-        b_x, b_y = get_image('bullet', self.power).get_size()
-        x,y = (self.img_x/2-b_x/2, self.img_y/2)
-        location.add(Vector(x,y))
-        return location
-    
-    #___________________________________________________________________________
-    # If I inherit from Sprite in the future, this will be called automatically
-    # through the RenderUpdate() group's update() method.
-    def update(self, movement):
-        movement.mul(self.speed)
-        self.location.add(movement)
-        #self.left_buddy_location.add(movement)
-        #self.right_buddy_location.add(movement)
-        # update all bullets:
-        for b in self.bullets:
-            b.update()
-            if b.alive == False:
-                self.bullets.remove(b)
-                
-    #___________________________________________________________________________    
-    def display(self):
-        #self.screen.blit(self.left_buddy, (self.left_buddy_location.x, self.left_buddy_location.y))
-        #self.screen.blit(self.right_buddy, (self.right_buddy_location.x, self.right_buddy_location.y))
-        #if self.alive:
-        self.screen.blit(self.image, (self.location.x, self.location.y))
-        
-        for b in self.bullets:
-            b.display()
             
 #===============================================================================
 class Boat(object):   # 20,50 gun turret
@@ -300,8 +93,8 @@ class Boat(object):   # 20,50 gun turret
     
     #___________________________________________________________________________
     def get_center(self):
-        return Vector(self.location.x + self.gun_location.x,
-                      self.location.y + self.gun_location.y)
+        return (self.location.x + self.gun_location.x,
+                self.location.y + self.gun_location.y)
     
     #___________________________________________________________________________    
     def update(self):
@@ -350,14 +143,14 @@ class Boat(object):   # 20,50 gun turret
             return
             
         gun = self.get_center()
-        if gun.y > self.target.y:
+        if gun[Y] > self.target[Y]:
             return
     
         # get a random float:
         #chance = random.random()
         # we only fire 8% of the time
         #if chance <= .08:
-        if abs(self.target.x - self.location.x) <= 50:
+        if abs(self.target[X] - self.location[X]) <= 50:
             # get a random float:
             chance = random.random()
             if chance > .20:
@@ -497,8 +290,8 @@ class Plane(object):
     
     #___________________________________________________________________________
     def get_center(self):
-        return Vector(self.location.x + self.gun_location.x,
-                      self.location.y + self.gun_location.y)
+        return (self.location.x + self.gun_location.x,
+                self.location.y + self.gun_location.y)
     
     #___________________________________________________________________________    
     def update(self):
@@ -585,36 +378,6 @@ class Plane(object):
         for b in self.bullets:
             b.display()
             
-#===============================================================================
-class PowerUp(object):
-    name = 'power_up'
-    #___________________________________________________________________________
-    def __init__(self, screen, location):
-        """
-        name     = The name of this vehicle based on assets
-        location = Vector of initial position
-        
-        """
-        self.location = Vector(location[X],location[Y])
-        self.screen             = screen
-        self.speed              = 5
-        self.frame_count        = get_frame_count(self.name)
-        self.frame_delay        = FRAME_DELAY
-        self.frame              = 0
-        self.wait_time          = FRAME_DELAY
-        self.image = get_image(self.name, 0)
-    #___________________________________________________________________________
-    def update(self):
-        # we'll just make it go from left to right straight line for now.
-        if self.wait_time == 0:
-            self.location.x += self.speed
-            self.wait_time = FRAME_DELAY
-        else:
-            self.wait_time -= 1
-    #___________________________________________________________________________
-    def display(self):
-        self.screen.blit(self.image, (self.location.x, self.location.y))
-        
 #===============================================================================
 class BigPlane(object):
     name = 'big-plane'

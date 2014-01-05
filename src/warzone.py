@@ -2,7 +2,8 @@ import random
 import pygame
 from pygame.locals import *
 from hud import Score, HealthBar
-from mobile import Player, Boat, Plane, PowerUp, BigPlane
+from enemies import Boat, Plane, BigPlane
+from player import Player
 from particles import Explosion
 from utility import *
 
@@ -34,9 +35,9 @@ class WarZone(object):
         
         
         # boat lives through lives logically so health bar init once.
-        self.boat_health_bar = HealthBar(screen, (self.screen.get_width() - 200,
-                                                  0), (255,0,0))
-        self.boat_health_bar.full_health()
+        #self.boat_health_bar = HealthBar(screen, (self.screen.get_width() - 200,
+        #                                          0), (255,0,0))
+        #self.boat_health_bar.full_health()
         
         
         self.score_center = (self.screen_center[X] - SCORE_BOARD_WIDTH/2, 5)
@@ -51,8 +52,16 @@ class WarZone(object):
         self.bomb_image = get_image('bomb', 0)
         self.bombs = 3
 
-        self.background1 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 0)
-        self.background2 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 1)
+        self.backgrounds = [get_background((self.screen_size[X], 
+                                            self.screen_size[Y] + 32), 
+                                            level, 0),
+                            get_background((self.screen_size[X], 
+                                            self.screen_size[Y] + 32), 
+                                            level, 1)
+        ]
+        
+        #self.background1 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 0)
+        #self.background2 = get_background((self.screen_size[X], self.screen_size[Y] + 32), level, 1)
 
         self.clock = pygame.time.Clock()
 
@@ -101,13 +110,13 @@ class WarZone(object):
         player = Player(self.screen, 
                        (self.start_location[X], self.start_location[Y]))
                        
-        boat = Boat(self.screen, player)
-        big_papa = BigPlane(self.screen, (self.start_location[X] + 30, self.start_location[Y]))
+        #boat = Boat(self.screen, player)
+        #big_papa = BigPlane(self.screen, (self.start_location[X] + 30, self.start_location[Y]))
         planes = []
         explosions = []
     
         fighting = True
-        background = self.background1
+        #background = self.background1
         cycle = 0
         wait  = 1 * FPS
         reset = wait
@@ -116,11 +125,12 @@ class WarZone(object):
         bg_frame = 0
         bg_wait = 30
         bg_speed = 1
+        #background = self.backgrounds[bg_frame]
         
         lives_size = self.lives_image.get_size()[0]
         
-        powerup = PowerUp(self.screen, 
-                       (self.start_location[X], self.start_location[Y]- 40))
+        #powerup = PowerUp(self.screen, 
+        #               (self.start_location[X], self.start_location[Y]- 40))
         
         while fighting:
             #raw_input('waiting') for debugging
@@ -133,6 +143,8 @@ class WarZone(object):
                 if e.type == KEYDOWN:
                    if e.key  == K_ESCAPE:
                     return
+                   elif e.key == K_w:
+                    player.activate_powerup("wingman-powerup")
                    elif e.key == K_q:
                     player.power += 1
                     if player.power > 3:
@@ -153,24 +165,11 @@ class WarZone(object):
                 #    explosions.append(explosion)
 
 
-            # get the input key
-            key = pygame.key.get_pressed()
-            move = Vector(0,0)
-            # process the key
-            if key[K_LEFT]:
-                move.x -= 1
-            if key[K_RIGHT]:
-                move.x += 1
-            if key[K_UP]:
-                move.y -= 1
-            if key[K_DOWN]:
-                move.y += 1
-
             #self.health_bar.decrease_health(1)
-            player.update(move)
-            powerup.update()
-            big_papa.update()
-            boat.update()
+            player.update()
+            #powerup.update()
+            #big_papa.update()
+            #boat.update()
 
             #-------------------------------------------------------------------
             # Change background might be a little overkill because I think it
@@ -183,14 +182,16 @@ class WarZone(object):
                     x = random.randint(20, 600)
                     planes.append(Plane(self.screen, Vector(x, 0), player))
             
-                if background == self.background1:
-                    print 'scene change to 2'
-                    background = self.background2
-                    # can debug lives:
-                    #fighting = False
-                else:
-                    print 'scene change to 1'
-                    background = self.background1
+                #if background == self.background1:
+                #    print 'scene change to 2'
+                #    background = self.background2
+                #    # can debug lives:
+                #    #fighting = False
+                #else:
+                #    print 'scene change to 1'
+                #    background = self.background1
+                bg_frame = 1 - bg_frame
+                
                 wait = reset  
                 
             # more debug aspects going here...
@@ -199,14 +200,15 @@ class WarZone(object):
             #-------------------------------------------------------------------
             
             
-            self.screen.blit(background, (0,0), (0, bg_counter, 640, 480))
+            self.screen.blit(self.backgrounds[bg_frame], (0,0), 
+                             (0, bg_counter, 640, 480))
             #self.screen.blit(background, (0,0))
             
             # note to self... always display boat first.
-            boat.display()
+            #boat.display()
             player.display()
-            powerup.display()
-            big_papa.display()
+            #powerup.display()
+            #big_papa.display()
             
             live_x = 0
             live_y = 0
@@ -249,7 +251,7 @@ class WarZone(object):
             
             self.score.display()
             self.health_bar.display()
-            self.boat_health_bar.display()
+            #self.boat_health_bar.display()
 
             pygame.display.flip()
             wait -= 1

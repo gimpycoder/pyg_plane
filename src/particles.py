@@ -2,6 +2,53 @@ import math, random
 import pygame as pyg
 from utility import *
 
+X = 0
+Y = 1
+
+#===============================================================================
+class Bullet(object):
+    # power 0 = little pea shooter (standard bullet)
+    #___________________________________________________________________________
+    def __init__(self, screen, location, radius, power=0, speed=(0,5)):
+        self.screen = screen
+        self.location = Vector(location[X], location[Y])
+        self.radius = radius
+        self.power  = power
+        self.speed = Vector(speed[X], speed[Y])
+        self.image = get_image('bullet', power)
+        self.img_x, self.img_y = self.image.get_size()
+        self.alive = True
+    
+    def get_rect(self):
+        return Rect(self.location.x, self.location.y, self.img_x, self.img_y)
+    
+    #___________________________________________________________________________   
+    def update(self):
+        self.location.add(self.speed)
+        self.check_boundaries()
+    
+    #___________________________________________________________________________
+    def check_boundaries(self):
+        # this just makes refering to them shorter.
+        x = self.location.x
+        y = self.location.y
+        # get our x,y boundaries by unpacking get_size()
+        right, bottom = self.screen.get_size()
+        
+        # our boundaries start at 0,0 of the image so we have to
+        # offset where we are checking by the width of the image.
+        if x > right or x < 0 or y > bottom or y < 0:
+            self.alive = False
+            
+        self.location.x = x
+        self.location.y = y
+    
+    #___________________________________________________________________________    
+    def display(self):
+        if self.alive:
+            self.screen.blit(self.image, (self.location.x, self.location.y))
+
+
 ################################################################################
 # PARTICLE SYSTEMS IN THE GAME.
 # Classes in File:
@@ -19,11 +66,11 @@ class Particle(object):
         self.is_shrinking   = False
         self.is_dead        = False
         
-        print 'PARTICLE'
-        print 'location: %s' % self.location
-        print 'power: %r' % self.power
-        print 'max radius: %r' % self.max_radius
-        print 'radius: %r' % self.radius
+        #print 'PARTICLE'
+        #print 'location: %s' % self.location
+        #print 'power: %r' % self.power
+        #print 'max radius: %r' % self.max_radius
+        #print 'radius: %r' % self.radius
         #raw_input('wait')
     #___________________________________________________________________________    
     def update(self):
@@ -94,10 +141,10 @@ class Explosion(object):
         # this explosion's location by the magnitude of our vector.
         location.add(movement)
         # debug printing (fine-tuning particles is hard work!)
-        print "power=%r, radius=%r" % (power, radius)
-        print 'dx=%d,dy=%d' % (dx,dy)
-        print 'center=%s, particle=%s' % (self.location, location)
-        print 'movement=%s' % movement
+        #print "power=%r, radius=%r" % (power, radius)
+        #print 'dx=%d,dy=%d' % (dx,dy)
+        #print 'center=%s, particle=%s' % (self.location, location)
+        #print 'movement=%s' % movement
         # create our particle with this configuration and return it.
         return Particle(location, power, radius)
     #___________________________________________________________________________    
@@ -114,6 +161,7 @@ class Explosion(object):
                 circle.update()
                 
         if corpses == len(self.circles):
+            print 'explosion dead'
             self.is_alive = False
     #___________________________________________________________________________    
     def display(self):
