@@ -222,10 +222,6 @@ image_paths  = {
     'water'             : ['../res/water_01.png',
                            '../res/water_02.png'
                           ],
-    'title'             : ['../res/title_graphic.png',
-                           '../res/title_menu.png',
-                           '../res/wings_pointer.png'
-                          ],
     'get_ready'         : ['../res/get_ready_01.png',
                            '../res/get_ready_02.png'
                           ],
@@ -385,11 +381,6 @@ def init():
                              pyg.image.load(image_paths['bomber'][4]),
                              pyg.image.load(image_paths['bomber'][5]),
                              pyg.image.load(image_paths['bomber'][6])]
-    
-    # Title screen graphics.
-    assets['title']     = [pyg.image.load(image_paths['title'][0]),
-                           pyg.image.load(image_paths['title'][1]),
-                           pyg.image.load(image_paths['title'][2])]
                            
     assets['get_ready'] = [pyg.image.load(image_paths['get_ready'][0]),
                            pyg.image.load(image_paths['get_ready'][1])]
