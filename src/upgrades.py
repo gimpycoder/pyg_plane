@@ -1,5 +1,9 @@
 import pygame as pyg
+from pygame.locals import *
 from utility import *
+
+X = 0
+Y = 1
 
 #===============================================================================
 class PowerUp(object):
@@ -19,6 +23,11 @@ class PowerUp(object):
         self.frame              = 0
         self.wait_time          = FRAME_DELAY
         self.image = get_image(self.name, 0)
+        self.img_x, self.img_y = self.image.get_size()
+    
+    def get_rect(self):
+        return Rect(self.location.x, self.location.y, self.img_x, self.img_y)
+        
     #___________________________________________________________________________
     def update(self):
         # we'll just make it go from left to right straight line for now.

@@ -161,11 +161,11 @@ class Explosion(object):
                 circle.update()
                 
         if corpses == len(self.circles):
-            print 'explosion dead'
+            #print 'explosion dead'
             self.is_alive = False
     #___________________________________________________________________________    
     def display(self):
-        print 'explosion exists'
+        #print 'explosion exists'
         if self.is_alive:
             for circle in self.circles:
                 if not circle.is_dead:

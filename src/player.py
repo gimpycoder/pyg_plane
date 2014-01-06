@@ -35,10 +35,13 @@ Y = 1
 
 # TODO: Implement the explosion again - twas broken and now it's gone.
 WINGMAN = 'wingman-powerup'
+WEAPON  = 'power_up'
 class Player(object):
     # used for retrieving the sprite. might get rid of this and just pass in
     # the sprite collection
     name = 'player'
+
+    (INVINCIBLE, ACTIVE, EXPLODING) = range(3)
 
     #___________________________________________________________________________
     # The player does not have a cool-down because firing is tied to KEYDOWN
@@ -66,6 +69,12 @@ class Player(object):
         self.image = get_image(self.name, 0)
         
         self.wingmen = Wingmen(screen, location, self.image.get_rect())
+        
+        self.state = Player.ACTIVE
+        
+        self.explosion = None
+        
+        self.complete = False
     
     def take_damage(self, amount):
         if self.wingmen.deactivate() == False:
@@ -78,11 +87,17 @@ class Player(object):
             self.wingmen.activate()
             # increment score here...
             print "SCORE + 100"
+        elif powerup_name == WEAPON:
+            self.power = self.power + 1 if self.power < 3 else 3
+            print "WEAPON UPGRADE"
             
     #___________________________________________________________________________
     # Here is where bullets are added to the collection. The bullets start at
     # the center top of the player image.    
     def fire(self):
+        if self.state == Player.EXPLODING:
+            return
+    
         gun = list(self.get_center())
         gun[Y] = self.location.y
         
@@ -158,13 +173,25 @@ class Player(object):
         return (location.x, location.y)
     
     #___________________________________________________________________________
-    # If I inherit from Sprite in the future, this will be called automatically
-    # through the RenderUpdate() group's update() method.
     def update(self):
-        # get the input key
+        for b in self.bullets:
+            b.update()
+            if b.alive == False:
+                self.bullets.remove(b)
+    
+        if self.state == Player.EXPLODING:
+            if self.explosion == None:
+                self.explosion = ExplodingPlayer(self.screen, 
+                                                 self.location.get_tuple(), 
+                                                 32, 50)
+            self.explosion.update()
+            if self.explosion.complete == True:
+                self.complete = True
+            return
+
         key = pyg.key.get_pressed()
         move = Vector(0,0)
-        # process the key
+
         if key[K_LEFT]:
             move.x -= 1
         if key[K_RIGHT]:
@@ -177,22 +204,50 @@ class Player(object):
         move.mul(self.speed)
         self.location.add(move)
         self.wingmen.update((move.x, move.y))
-
-        # update all bullets:
-        for b in self.bullets:
-            b.update()
-            if b.alive == False:
-                self.bullets.remove(b)
                 
     #___________________________________________________________________________    
     def display(self):
-        #if self.alive:
-        self.screen.blit(self.image, (self.location.x, self.location.y))
-        self.wingmen.display()
+        #print 'display in player'
+        if self.state == Player.EXPLODING:
+            self.explosion.display()
+        else:
+            self.screen.blit(self.image, (self.location.x, self.location.y))
+            self.wingmen.display()
         
         for b in self.bullets:
             b.display()
             
+#===============================================================================
+class ExplodingPlayer(object):
+    name = 'ExplodingPlayer'
+
+    #---------------------------------------------------------------------------
+    def __init__(self, screen, location, power, max_radius):
+        self.screen = screen
+        self.location = location
+        self.explosion = Explosion(self.screen, 
+                                   location, 
+                                   power, max_radius)
+        self.explosion.build(100)
+    
+        self.complete = False
+        
+        #http://soundbible.com/1986-Bomb-Exploding.html
+        self.sound = pyg.mixer.Sound("../res/explosion.wav")
+        self.sound.play() #Where does the sound go in code?
+    
+    #---------------------------------------------------------------------------    
+    def update(self):
+        if self.explosion.is_alive == True:
+            self.explosion.update()
+        else:
+            self.complete = True
+            self.sound.stop()
+    
+    #---------------------------------------------------------------------------    
+    def display(self):
+        #print 'display in exploding player'
+        self.explosion.display()            
 #===============================================================================
 class Wingmen(object):
     name = 'wingman'
@@ -214,9 +269,6 @@ class Wingmen(object):
                              
         self.R_location = [self.player_location[X] + player_rect.right,
                            self.player_location[Y] + player_rect.centery]
-                           
-        #self.L_gun = [self.L_location[X]/2, self.L_location[Y]]
-        #self.R_gun = [self.R_location[X]/2, self.R_location[Y]]
     
     def L_gun(self, bullet_rect):
         return [self.L_location[X] + self.L_rect.centerx - bullet_rect.centerx,
@@ -229,19 +281,19 @@ class Wingmen(object):
     def activate(self):
         if Wingmen.L_ACTIVE == False:
             Wingmen.L_ACTIVE = True
-            print 'left wingman added'
+            #print 'left wingman added'
         elif Wingmen.L_ACTIVE == True and Wingmen.R_ACTIVE == False:
             Wingmen.R_ACTIVE = True
-            print 'right wingman added'
+            #print 'right wingman added'
             
     def deactivate(self):
         if Wingmen.R_ACTIVE == True:
             Wingmen.R_ACTIVE = False
-            print 'right wingman removed'
+            #print 'right wingman removed'
             return True
         elif Wingmen.L_ACTIVE == True:
             Wingmen.L_ACTIVE = False
-            print 'left wingman removed'
+            #print 'left wingman removed'
             return True
         
         return False

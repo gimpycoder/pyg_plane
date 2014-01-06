@@ -100,9 +100,9 @@ class HealthBar(object):
     
     #___________________________________________________________________________        
     def is_dead(self):
-        if self.health <= 0:
-            print 'dead'
-            raw_input('health.py')
+        #if self.health <= 0:
+        #    print 'dead'
+        #    raw_input('health.py')
         return self.health <= 0
     
     #___________________________________________________________________________    

@@ -399,14 +399,6 @@ def init():
     assets['game_over'] = [pyg.image.load(image_paths['game_over'][0]),
                            pyg.image.load(image_paths['game_over'][1])]
     
-    # .convert() ensures it's the proper pixel format for the game.
-    # a few images have black backgrounds so must use a different
-    # colorkey for transparency.
-    #
-    # What this is really doing that's important though is adding a 
-    # colorkey to the image based on what it is. Being able to call 
-    # convert on it here instead of where it's assigned ^^ is just
-    # a nice side-effect.
     black_background = ['health','wave','score','get_ready', 'title', 
                         'game_over'
     ]

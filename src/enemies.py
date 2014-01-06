@@ -11,7 +11,6 @@ Y = 1
 # Classes in File:
 # Boat
 # Plane
-# PowerUp
             
 #===============================================================================
 class Boat(object):   # 20,50 gun turret
@@ -218,6 +217,7 @@ class Plane(object):
     ]
     name = 'olive-plane'
     FIRE_RATE = 10
+    
     #___________________________________________________________________________
     def __init__(self, screen, location, player, speed=1, bullet_speed=5):
         self.name = random.choice(self.names)
@@ -369,6 +369,7 @@ class Plane(object):
                     self.explode()
                 self.explosion.update()
                 self.explosion.display()
+                
             else:
                 self.screen.blit(self.image, (self.location.x, self.location.y))
         else:

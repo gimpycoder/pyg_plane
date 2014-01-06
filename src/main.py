@@ -1,23 +1,20 @@
-# tippy top level of logic. it starts and ends here.
+# BUGS:
+# 1. Holding UP and LEFT prevents shooting
+# 2. Holding DOWN and RIGHT prevents shooting (Same as #1)
+# 3. Destroying a plane removes its bullets as well.
+# 4. Player bullets stay on screen but do not update location (frozen) on when
+#    exploding.
 
 import pygame
 from pygame.locals import *
 from warzone import WarZone
-from utility import *
-
-#_______________________________________________________________________________
-def debug(*args):
-    for arg in args:
-        print arg
-    raw_input('debug')
+import utility
 
 #_______________________________________________________________________________
 if __name__ == '__main__':
     pygame.init()
     screen = pygame.display.set_mode((640,480))
-    init()
-    warzone = WarZone(screen,level=1,lives=1)
-    #warzone.menu()
-    #warzone.dead()
+    utility.init()
+    warzone = WarZone(screen,level=1,lives=3)
     warzone.new_game()
     
