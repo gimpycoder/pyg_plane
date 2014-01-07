@@ -58,7 +58,7 @@ class WarZone(object):
         self.clock = pygame.time.Clock()
         
         #http://soundbible.com/1986-Bomb-Exploding.html
-        self.sound = pyg.mixer.Sound("../res/explosion.wav")
+        self.sound = get_sfx('explosion')
         self.sound.set_volume(0.5)
 
 

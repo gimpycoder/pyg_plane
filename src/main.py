@@ -2,8 +2,6 @@
 # 1. Holding UP and LEFT prevents shooting
 # 2. Holding DOWN and RIGHT prevents shooting (Same as #1)
 # 3. Destroying a plane removes its bullets as well.
-# 4. Player bullets stay on screen but do not update location (frozen) on when
-#    exploding.
 
 import pygame
 from pygame.locals import *
