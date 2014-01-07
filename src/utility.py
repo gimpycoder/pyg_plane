@@ -95,44 +95,19 @@ PATH_BIGPLANE   = 'data/enemies/aerial/misc'
 PATH_BOMBER     = 'data/enemies/aerial/bomber'
 
 image_paths  = {
-#    os.path.join("data","babytux.png")
-
-#    'player'            : ['../res/hero_01.png',
-#                           '../res/hero_02.png', 
-#                           '../res/hero_03.png'
-#                          ],
-
     'player'    : [os.path.join(PATH_HERO, 'hero_01.png'),
                    os.path.join(PATH_HERO, 'hero_02.png'),
                    os.path.join(PATH_HERO, 'hero_03.png')],
                    
     'wingman'   : [os.path.join(PATH_HERO, 'wingman.png')],
-                          
-#    'wingman'           : ['../res/wingman.png'],
-                          
-#    'bullet'            : ['../res/bullet_01.png',
-#                           '../res/bullet_02.png',
-#                           '../res/bullet_03.png',
-#                           '../res/bullet_04.png'],
 
     'bullet'    : [os.path.join(PATH_BULLETS, 'bullet_01.png'),
                    os.path.join(PATH_BULLETS, 'bullet_02.png'),
                    os.path.join(PATH_BULLETS, 'bullet_03.png'),
                    os.path.join(PATH_BULLETS, 'bullet_04.png')],
-                          
-#    'boat'              : ['../res/boat_a_01.png',
-#                           '../res/boat_a_02.png'
-#                          ],
 
     'boat'      : [os.path.join(PATH_BOAT, 'boat_a_01.png'),
                    os.path.join(PATH_BOAT, 'boat_a_02.png')],
-                          
-#    'submarine'         : ['../res/submarine/sub_01.png',   # exposed
-#                           '../res/submarine/sub_02.png',   # submerge 1
-#                           '../res/submarine/sub_03.png',   # submerge 2
-#                           '../res/submarine/sub_04.png',   # submerge 3
-#                           '../res/submarine/sub_05.png',   # submerge 4
-#                           '../res/submarine/sub_06.png'],  # submerge 5
 
     'submarine' : [os.path.join(PATH_SUBMARINE, 'sub_01.png'), # exposed
                    os.path.join(PATH_SUBMARINE, 'sub_02.png'), # submerge 1
@@ -141,16 +116,6 @@ image_paths  = {
                    os.path.join(PATH_SUBMARINE, 'sub_05.png'), # submerge 4
                    os.path.join(PATH_SUBMARINE, 'sub_06.png')  # submerge 5
                   ],
-
-                          
-#    'turret'            : ['../res/turret/turret_south.png',
-#                           '../res/turret/turret_south_east.png',
-#                           '../res/turret/turret_east.png',
-#                           '../res/turret/turret_north_east.png',
-#                           '../res/turret/turret_north.png',
-#                           '../res/turret/turret_north_west.png',
-#                           '../res/turret/turret_west.png',
-#                           '../res/turret/turret_south_west.png'],
 
     'turret'    : [os.path.join(PATH_TURRET, 'turret_south.png'),
                    os.path.join(PATH_TURRET, 'turret_south_east.png'),
@@ -161,25 +126,6 @@ image_paths  = {
                    os.path.join(PATH_TURRET, 'turret_west.png'),
                    os.path.join(PATH_TURRET, 'turret_south_west.png')
                   ],
-    
-#    'olive-plane'       : ['../res/planes/olive_01.png',
-#                           '../res/planes/olive_02.png',
-#                           '../res/planes/olive_03.png',
-#                           '../res/planes/olive_04.png',   # south
-#                           '../res/planes/olive_05.png',   # south-east
-#                           '../res/planes/olive_06.png',   # east
-#                           '../res/planes/olive_07.png',   # north-east
-#                           '../res/planes/olive_08.png',   # north
-#                           '../res/planes/olive_09.png',   # north-west
-#                           '../res/planes/olive_10.png',   # west
-#                           '../res/planes/olive_11.png',   # south-west
-#                           '../res/planes/olive_12.png',   # flip 01
-#                           '../res/planes/olive_13.png',   # flip 02
-#                           '../res/planes/olive_14.png',   # flip 03
-#                           '../res/planes/olive_15.png',   # flip 04
-#                           '../res/planes/olive_16.png',   # flip 05
-#                           '../res/planes/olive_17.png',   # upside down 01
-#                           '../res/planes/olive_18.png'],  # upside down 02
 
     'olive-plane'   : [os.path.join(PATH_OLIVE, 'olive_01.png'),
                        os.path.join(PATH_OLIVE, 'olive_02.png'),
@@ -201,26 +147,6 @@ image_paths  = {
                        os.path.join(PATH_OLIVE, 'olive_18.png')  # flipped 2
                       ],
 
-                           
-#    'white-plane'       : ['../res/planes/white_01.png',
-#                           '../res/planes/white_02.png',
-#                           '../res/planes/white_03.png',
-#                           '../res/planes/white_04.png',   # south
-#                           '../res/planes/white_05.png',   # south-east
-#                           '../res/planes/white_06.png',   # east
-#                           '../res/planes/white_07.png',   # north-east
-#                           '../res/planes/white_08.png',   # north
-#                           '../res/planes/white_09.png',   # north-west
-#                           '../res/planes/white_10.png',   # west
-#                           '../res/planes/white_11.png',   # south-west
-#                           '../res/planes/white_12.png',   # flip 01
-#                           '../res/planes/white_13.png',   # flip 02
-#                           '../res/planes/white_14.png',   # flip 03
-#                           '../res/planes/white_15.png',   # flip 04
-#                           '../res/planes/white_16.png',   # flip 05
-#                           '../res/planes/white_17.png',   # upside down 01
-#                           '../res/planes/white_18.png'],  # upside down 02
-
     'white-plane'   : [os.path.join(PATH_WHITE, 'white_01.png'),
                        os.path.join(PATH_WHITE, 'white_02.png'),
                        os.path.join(PATH_WHITE, 'white_03.png'),
@@ -240,25 +166,6 @@ image_paths  = {
                        os.path.join(PATH_WHITE, 'white_17.png'), # flipped 1
                        os.path.join(PATH_WHITE, 'white_18.png')  # flipped 2
                       ],
-                           
-#    'green-plane'       : ['../res/planes/green_01.png',
-#                           '../res/planes/green_02.png',
-#                           '../res/planes/green_03.png',
-#                           '../res/planes/green_04.png',   # south
-#                           '../res/planes/green_05.png',   # south-east
-#                           '../res/planes/green_06.png',   # east
-#                           '../res/planes/green_07.png',   # north-east
-#                           '../res/planes/green_08.png',   # north
-#                           '../res/planes/green_09.png',   # north-west
-#                           '../res/planes/green_10.png',   # west
-#                           '../res/planes/green_11.png',   # south-west
-#                           '../res/planes/green_12.png',   # flip 01
-#                           '../res/planes/green_13.png',   # flip 02
-#                           '../res/planes/green_14.png',   # flip 03
-#                           '../res/planes/green_15.png',   # flip 04
-#                           '../res/planes/green_16.png',   # flip 05
-#                           '../res/planes/green_17.png',   # upside down 01
-#                           '../res/planes/green_18.png'],  # upside down 02
 
     'green-plane'   : [os.path.join(PATH_GREEN, 'green_01.png'),
                        os.path.join(PATH_GREEN, 'green_02.png'),
@@ -279,25 +186,6 @@ image_paths  = {
                        os.path.join(PATH_GREEN, 'green_17.png'), # flipped 1
                        os.path.join(PATH_GREEN, 'green_18.png')  # flipped 2
                       ],
-                           
-#    'blue-plane'        : ['../res/planes/blue_01.png',
-#                           '../res/planes/blue_02.png',
-#                           '../res/planes/blue_03.png',
-#                           '../res/planes/blue_04.png',   # south
-#                           '../res/planes/blue_05.png',   # south-east
-#                           '../res/planes/blue_06.png',   # east
-#                           '../res/planes/blue_07.png',   # north-east
-#                           '../res/planes/blue_08.png',   # north
-#                           '../res/planes/blue_09.png',   # north-west
-#                           '../res/planes/blue_10.png',   # west
-#                           '../res/planes/blue_11.png',   # south-west
-#                           '../res/planes/blue_12.png',   # flip 01
-#                           '../res/planes/blue_13.png',   # flip 02
-#                           '../res/planes/blue_14.png',   # flip 03
-#                           '../res/planes/blue_15.png',   # flip 04
-#                           '../res/planes/blue_16.png',   # flip 05
-#                           '../res/planes/blue_17.png',   # upside down 01
-#                           '../res/planes/blue_18.png'],  # upside down 02
 
     'blue-plane'    : [os.path.join(PATH_BLUE, 'blue_01.png'),
                        os.path.join(PATH_BLUE, 'blue_02.png'),
@@ -318,19 +206,6 @@ image_paths  = {
                        os.path.join(PATH_BLUE, 'blue_17.png'), # flipped 1
                        os.path.join(PATH_BLUE, 'blue_18.png')  # flipped 2
                       ],
-                           
-#    'orange-plane'      : ['../res/planes/orange_01.png',
-#                           '../res/planes/orange_02.png',
-#                           '../res/planes/orange_03.png',
-#                           '../res/planes/orange_04.png',  # south
-#                           '../res/planes/orange_05.png',  # south-east
-#                           '../res/planes/orange_06.png',  # east
-#                           '../res/planes/orange_07.png',  # north-east
-#                           '../res/planes/orange_08.png',  # north
-#                           '../res/planes/orange_09.png',  # north-west
-#                           '../res/planes/orange_10.png',  # west
-#                           '../res/planes/orange_11.png'], # south-west
-#                                                          # NO FLIP!
 
     'orange-plane'  : [os.path.join(PATH_ORANGE, 'orange_01.png'),
                        os.path.join(PATH_ORANGE, 'orange_02.png'),
@@ -345,18 +220,7 @@ image_paths  = {
                        os.path.join(PATH_ORANGE, 'orange_11.png')  # SW
                       ],                                           # NO FLIP
 
-                                                           
-#    'big-plane'         : ['../res/BigPlane.png'],
-
     'big-plane'     : [os.path.join(PATH_BIGPLANE, 'BigPlane.png')],
-    
-#    'bomber'            : ['../res/bomber/bomber_00.png',  # size test
-#                           '../res/bomber/bomber_01.png',  # standard 01
-#                           '../res/bomber/bomber_02.png',  # standard 02
-#                           '../res/bomber/bomber_03.png',  # standard 03
-#                           '../res/bomber/bomber_04.png',  # crashing 01
-#                           '../res/bomber/bomber_05.png',  # crashing 02
-#                           '../res/bomber/bomber_06.png'], # crashing 03
 
     'bomber'    : [os.path.join(PATH_BOMBER, 'bomber_00.png'), # size test
                    os.path.join(PATH_BOMBER, 'bomber_01.png'), # standard 01
@@ -366,54 +230,22 @@ image_paths  = {
                    os.path.join(PATH_BOMBER, 'bomber_05.png'), # crashing 02
                    os.path.join(PATH_BOMBER, 'bomber_06.png')  # crashing 03
                   ],
-                          
-#    'health'            : ['../res/health_bar.png'],
 
     'health'    : [os.path.join(PATH_HUD, 'health_bar.png')],
-
-#    'numbers'           : ['../res/numbers.png'],
-
     'numbers'   : [os.path.join(PATH_HUD, 'numbers.png')],
-
-#    'score'             : ['../res/score_text.png'],
-
     'score'     : [os.path.join(PATH_HUD, 'score_text.png')],
-
-
-#    'power_up'          : ['../res/power_up_01.png',
-#                           '../res/power_up_02.png'
-#                          ],
-
-    'power_up'  : [os.path.join(PATH_UPGRADES, 'power_up_01.png'),
-                   os.path.join(PATH_UPGRADES, 'power_up_02.png')],
-                          
-#    'bomb'              : ['../res/bomb.png'],
-
     'bomb'      : [os.path.join(PATH_HUD, 'bomb.png')],
-
-#    'water'             : ['../res/water_01.png',
-#                           '../res/water_02.png'
-#                          ],
-
-    'water'     : [os.path.join(PATH_BACKGROUND, 'water_01.png'),
-                   os.path.join(PATH_BACKGROUND, 'water_02.png')],
-
-#    'get_ready'         : ['../res/get_ready_01.png',
-#                           '../res/get_ready_02.png'
-#                          ],
-
     'get_ready' : [os.path.join(PATH_HUD, 'get_ready_01.png'),
                    os.path.join(PATH_HUD, 'get_ready_02.png')],
-
-#    'lives'             : ['../res/wings_pointer.png'],
-
     'lives'     : [os.path.join(PATH_HUD, 'wings_pointer.png')],
-    
-#   'game_over'         : ['../res/game_over_01.png',
-#                           '../res/game_over_02.png']
-
     'game_over' : [os.path.join(PATH_HUD, 'game_over_01.png'),
-                   os.path.join(PATH_HUD, 'game_over_02.png')]
+                   os.path.join(PATH_HUD, 'game_over_02.png')],
+    
+    'power_up'  : [os.path.join(PATH_UPGRADES, 'power_up_01.png'),
+                   os.path.join(PATH_UPGRADES, 'power_up_02.png')],
+
+    'water'     : [os.path.join(PATH_BACKGROUND, 'water_01.png'),
+                   os.path.join(PATH_BACKGROUND, 'water_02.png')]
 
 }
 
