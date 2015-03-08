@@ -89,13 +89,13 @@ class WarZone(object):
     #___________________________________________________________________________
     # We enter this when a life has expired or the game is just starting.
     def new_game(self):
-        print 'new_game'
+        print('new_game')
         if self.lives > 0:
             self.alive = True
             self.fight()
         else:
             # continue screen maybe?
-            print 'quitting'
+            print('quitting')
     
     #___________________________________________________________________________
     # This loop goes on until the player is dead.
@@ -141,7 +141,7 @@ class WarZone(object):
                    elif e.key == K_SPACE:
                     player.fire()
                    elif e.key == K_b:
-                    print 'bomb dropped'
+                    print('bomb dropped')
                     self.bombs -= 1
                     for p in planes:
                         explosion = self.create_explosion(self.screen, (p.location.x, p.location.y))
@@ -174,11 +174,11 @@ class WarZone(object):
             
             
             
-            for i in xrange(self.lives):
+            for i in range(self.lives):
                 self.screen.blit(self.lives_image, (live_x + 7,live_y + 20))
                 live_x += lives_size
             
-            for i in xrange(1, self.bombs + 1):
+            for i in range(1, self.bombs + 1):
                 self.screen.blit(self.bomb_image, (self.screen_size[X] - 32 * i, self.screen_size[Y] - 32))
                 
                 
@@ -206,7 +206,7 @@ class WarZone(object):
                                                           plane.location.y))
                         
                         kills += 1
-                        print '%d planes destroyed' % kills
+                        print('%d planes destroyed' % kills)
                         explosions.append(explosion)
                         player.bullets.remove(b)
                         planes.remove(plane)
@@ -215,7 +215,7 @@ class WarZone(object):
                         
                         if kills % 10 == 0:
                             chance = random.random()
-                            print '%.2f powerup spawn chance' % chance
+                            print('%.2f powerup spawn chance' % chance)
                             if chance < 0.75:
                                 powerup = PowerUp(self.screen, plane.location.get_tuple())
                                 powerups.append(powerup)
@@ -286,12 +286,12 @@ class WarZone(object):
         reset = wait
         
         waitground = get_background(self.screen.get_size(), 0, 0)
-        print 'lives: %d' % self.lives
+        print('lives: %d' % self.lives)
         if self.lives > 0:
             message1  = get_image('get_ready', 0)
             message2  = get_image('get_ready', 1)
         else:
-            print 'game over'
+            print('game over')
             message1  = get_image('game_over', 0)
             message2  = get_image('game_over', 1)
         

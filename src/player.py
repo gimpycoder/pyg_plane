@@ -79,17 +79,17 @@ class Player(object):
     def take_damage(self, amount):
         if self.wingmen.deactivate() == False:
             self.health -= amount
-            print self.health
+            print(self.health)
     
     
     def activate_powerup(self, powerup_name):
         if powerup_name == WINGMAN:
             self.wingmen.activate()
             # increment score here...
-            print "SCORE + 100"
+            print("SCORE + 100")
         elif powerup_name == WEAPON:
             self.power = self.power + 1 if self.power < 3 else 3
-            print "WEAPON UPGRADE"
+            print("WEAPON UPGRADE")
             
     #___________________________________________________________________________
     # Here is where bullets are added to the collection. The bullets start at
@@ -111,7 +111,7 @@ class Player(object):
         self.bullets.append(bullet)
         
         if Wingmen.L_ACTIVE:
-            print 'Left Wingman Bullet Added'      
+            print('Left Wingman Bullet Added')      
             bullet = Bullet(self.screen, # we'll get rid of screen on this soon
                             (0,0), 
                             1,                 # little pea shooter radius
@@ -124,7 +124,7 @@ class Player(object):
         
         
         if Wingmen.R_ACTIVE:
-            print 'Right Wingman Bullet Added'
+            print('Right Wingman Bullet Added')
             bullet = Bullet(self.screen, # we'll get rid of screen on this soon
                             (0,0), 
                             1,                 # little pea shooter radius
@@ -207,7 +207,6 @@ class Player(object):
                 
     #___________________________________________________________________________    
     def display(self):
-        #print 'display in player'
         if self.state == Player.EXPLODING:
             self.explosion.display()
         else:
@@ -233,7 +232,7 @@ class ExplodingPlayer(object):
         self.complete = False
         
         #http://soundbible.com/1986-Bomb-Exploding.html
-        self.sound = pyg.mixer.Sound("../res/explosion.wav")
+        self.sound = pyg.mixer.Sound("data/audio/sfx/explosion.wav")
         self.sound.play() #Where does the sound go in code?
     
     #---------------------------------------------------------------------------    
@@ -246,7 +245,6 @@ class ExplodingPlayer(object):
     
     #---------------------------------------------------------------------------    
     def display(self):
-        #print 'display in exploding player'
         self.explosion.display()            
 #===============================================================================
 class Wingmen(object):
@@ -281,19 +279,15 @@ class Wingmen(object):
     def activate(self):
         if Wingmen.L_ACTIVE == False:
             Wingmen.L_ACTIVE = True
-            #print 'left wingman added'
         elif Wingmen.L_ACTIVE == True and Wingmen.R_ACTIVE == False:
             Wingmen.R_ACTIVE = True
-            #print 'right wingman added'
             
     def deactivate(self):
         if Wingmen.R_ACTIVE == True:
             Wingmen.R_ACTIVE = False
-            #print 'right wingman removed'
             return True
         elif Wingmen.L_ACTIVE == True:
             Wingmen.L_ACTIVE = False
-            #print 'left wingman removed'
             return True
         
         return False

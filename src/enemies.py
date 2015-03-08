@@ -124,7 +124,7 @@ class Boat(object):   # 20,50 gun turret
         elif 292.5 <= deg < 337.5:
             self.turret = self.directions['south-east']
         else:
-            print 'ERROR: %r' % deg
+            print('ERROR: %r' % deg)
          
     
         # our boat handles its own bullets now.

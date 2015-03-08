@@ -24,11 +24,11 @@ class Score(object):
 
     #___________________________________________________________________________
     def init(self):
-        for i in xrange(10):
+        for i in range(10):
             self.digits[str(i)] = get_number(str(i))
             
         self.width = self.digits['0'].get_size()[0] + 2
-        print self.width
+        print(self.width)
 
     #___________________________________________________________________________
     def increase_score(self, amount):
@@ -52,7 +52,7 @@ class Score(object):
     
         score = str(self)
         location = self.location.get_copy()
-        for i in xrange(len(score)):
+        for i in range(len(score)):
             img = self.digits[score[i]]
             self.screen.blit(img, (location.x, location.y))
             location.x += self.width
@@ -100,9 +100,6 @@ class HealthBar(object):
     
     #___________________________________________________________________________        
     def is_dead(self):
-        #if self.health <= 0:
-        #    print 'dead'
-        #    raw_input('health.py')
         return self.health <= 0
     
     #___________________________________________________________________________    

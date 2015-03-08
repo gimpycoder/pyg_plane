@@ -411,7 +411,7 @@ def init():
                         'game_over'
     ]
     
-    for (key,value) in assets.iteritems():
+    for (key,value) in assets.items():
         for i, img in enumerate(assets[key]):
                 
             if key in black_background:
@@ -427,7 +427,7 @@ def init():
     load_numbers()
     
             
-    print 'artwork initialized'
+    print('artwork initialized')
 
 #_______________________________________________________________________________
 #TODO: Generalize this so that it will load any slides provided
@@ -439,19 +439,19 @@ def load_numbers():
     offset = 0
     cropper = pyg.Surface((section, img_y)).convert()
     cropper.set_colorkey((0,0,0))
-    for i in xrange(10):
+    for i in range(10):
         cropper.blit(numbers,
                          (0,0), # start at coordinates for destination.
                          (offset, 0, offset + section, img_y))
         assets[str(i)] = [cropper.copy()]
         offset += section
-        #print 'loaded number %d' % i
+        #print('loaded number %d' % i)
 #_______________________________________________________________________________
 def get_number(name):
     return get_image(name, 0)
 #_______________________________________________________________________________
 def get_image(name, frame):
-    #print '%r, %d' % (name,frame)
+    #print('%r, %d' % (name,frame))
     return assets[name][frame]
 #_______________________________________________________________________________    
 def get_frame_count(name):
@@ -476,8 +476,8 @@ def get_background(zone_size, level, frame=0):
     if level > 0:
         size_x, size_y = zone.get_size()
         box_x, box_y = image.get_size()
-        for y in xrange(0, size_y, box_y):
-            for x in xrange(0, size_x, box_x):
+        for y in range(0, size_y, box_y):
+            for x in range(0, size_x, box_x):
                 zone.blit(image, (x,y))
                         
     return zone
@@ -511,4 +511,4 @@ def get_sfx(name):
     if name.lower() == 'explosion':
         return pyg.mixer.Sound(os.path.join(PATH_SFX, 'explosion.wav'))
     else:
-        print 'sound %s does not exist' % name
+        print('sound %s does not exist' % name)

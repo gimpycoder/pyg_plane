@@ -115,7 +115,7 @@ class Explosion(object):
         self.is_alive = True
     #___________________________________________________________________________
     def build(self, particle_count):
-        for i in xrange(particle_count):
+        for i in range(particle_count):
             self.circles.append(self.generate_circle())    
     #___________________________________________________________________________    
     def generate_circle(self):
